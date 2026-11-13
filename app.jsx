@@ -164,8 +164,8 @@ const LAYOUT_OPTIONS = [
 
 const App = () => {
   const [time, setTime] = useState(new Date());
-  const [layoutMode, setLayoutMode] = useState('classic'); // 'classic' | 'left-receipt' | 'split-speed'
-  const [mainMode, setMainMode] = useState('Beverage'); // 'Lunch' | 'Dinner' | 'Beverage'
+  const [layoutMode, setLayoutMode] = useState('classic');
+  const [mainMode, setMainMode] = useState('Beverage');
   const [subTab, setSubTab] = useState('Sparkling & White Wine');
   const [spiritCat, setSpiritCat] = useState('Gin');
   const [selectedTable, setSelectedTable] = useState('Standard');
@@ -301,70 +301,70 @@ const App = () => {
   const sideItems = useMemo(() => POS_MENU.filter(i => i.category === 'Sides'), [POS_MENU]);
   const dessertItems = useMemo(() => POS_MENU.filter(i => i.category === 'Desserts'), [POS_MENU]);
 
-  const btnBase = 'rounded border border-slate-500/70 shadow-sm font-bold leading-tight flex items-center justify-center text-center px-1.5 py-1 active:scale-95 transition-transform select-none cursor-pointer overflow-hidden';
+  const btnBase = 'rounded border border-slate-500/70 shadow-sm font-bold leading-tight flex items-center justify-center text-center px-1 py-0.5 active:scale-95 transition-transform select-none cursor-pointer overflow-hidden text-[clamp(9px,0.68vw,12px)]';
 
-  // --- Shared Modular Sections ---
+  // --- Shared Modular Sections (100% reactive to window size, zero page overflow) ---
   const renderModeAndFunctions = () => (
-    <div className="grid gap-1 h-11 shrink-0" style={{ gridTemplateColumns: 'repeat(13, minmax(0, 1fr))' }}>
-      <button onClick={() => switchMainMode('Lunch')} className={`${btnBase} text-sm ${mainMode === 'Lunch' ? 'bg-[#1d4ed8] text-white ring-2 ring-sky-300' : 'bg-[#334155] text-slate-200 hover:bg-slate-600'}`}>Lunch</button>
-      <button onClick={() => switchMainMode('Dinner')} className={`${btnBase} text-sm ${mainMode === 'Dinner' ? 'bg-[#1d4ed8] text-white ring-2 ring-sky-300' : 'bg-[#1e3a8a] text-white hover:bg-blue-800'}`}>Dinner</button>
-      <button onClick={() => switchMainMode('Beverage')} className={`${btnBase} text-sm ${mainMode === 'Beverage' ? 'bg-[#1d4ed8] text-white ring-2 ring-sky-300' : 'bg-[#1e3a8a] text-white hover:bg-blue-800'}`}>Beverage</button>
+    <div className="grid gap-1 h-[clamp(28px,4.1vh,44px)] shrink-0" style={{ gridTemplateColumns: 'repeat(13, minmax(0, 1fr))' }}>
+      <button onClick={() => switchMainMode('Lunch')} className={`${btnBase} text-[clamp(10px,0.8vw,14px)] ${mainMode === 'Lunch' ? 'bg-[#1d4ed8] text-white ring-2 ring-sky-300' : 'bg-[#334155] text-slate-200 hover:bg-slate-600'}`}>Lunch</button>
+      <button onClick={() => switchMainMode('Dinner')} className={`${btnBase} text-[clamp(10px,0.8vw,14px)] ${mainMode === 'Dinner' ? 'bg-[#1d4ed8] text-white ring-2 ring-sky-300' : 'bg-[#1e3a8a] text-white hover:bg-blue-800'}`}>Dinner</button>
+      <button onClick={() => switchMainMode('Beverage')} className={`${btnBase} text-[clamp(10px,0.8vw,14px)] ${mainMode === 'Beverage' ? 'bg-[#1d4ed8] text-white ring-2 ring-sky-300' : 'bg-[#1e3a8a] text-white hover:bg-blue-800'}`}>Beverage</button>
 
-      <button onClick={() => showToast('Chit #104 Assigned')} className={`${btnBase} bg-[#b91c1c] text-white text-[11px]`}>Chit Number</button>
-      <button onClick={() => showToast('Transaction Add')} className={`${btnBase} bg-[#ea580c] text-white text-[11px]`}>Transaction Add</button>
-      <button onClick={() => { setEnterQtyMode(!enterQtyMode); showToast(enterQtyMode ? 'Qty Mode Off' : 'Type Qty on Numpad then Tap Item'); }} className={`${btnBase} ${enterQtyMode ? 'bg-sky-400 text-slate-950 ring-2 ring-white' : 'bg-[#0284c7] text-white'} text-[11px]`}>Enter Quantity</button>
-      <button onClick={() => setModal({ type: 'discount' })} className={`${btnBase} bg-[#d97706] text-white text-[11px]`}>Discount</button>
-      <button onClick={() => setModal({ type: 'comment' })} className={`${btnBase} bg-[#dc2626] text-white text-[11px]`}>ADD Comment</button>
-      <button onClick={() => { if (orderLines.length) { const last = orderLines[orderLines.length - 1]; addItem(last.name, last.price); } }} className={`${btnBase} bg-[#0d9488] text-white text-[11px]`}>Repeat Order</button>
-      <button onClick={() => showToast(`Printing Bill ($${total.toFixed(2)})`)} className={`${btnBase} bg-[#3b82f6] text-slate-950 text-[11px]`}>Print Bill</button>
-      <button onClick={() => showToast('Printing Last Receipt')} className={`${btnBase} bg-[#115e59] text-white text-[11px]`}>Print Receipt</button>
-      <button onClick={() => showToast('Cash Drawer Opened')} className={`${btnBase} bg-[#c2410c] text-white text-[11px]`}>Open Drawer</button>
-      <button onClick={() => setModal({ type: 'functions' })} className={`${btnBase} bg-[#b91c1c] text-white text-[11px]`}>Functions</button>
+      <button onClick={() => showToast('Chit #104 Assigned')} className={`${btnBase} bg-[#b91c1c] text-white`}>Chit Number</button>
+      <button onClick={() => showToast('Transaction Add')} className={`${btnBase} bg-[#ea580c] text-white`}>Transaction Add</button>
+      <button onClick={() => { setEnterQtyMode(!enterQtyMode); showToast(enterQtyMode ? 'Qty Mode Off' : 'Type Qty on Numpad then Tap Item'); }} className={`${btnBase} ${enterQtyMode ? 'bg-sky-400 text-slate-950 ring-2 ring-white' : 'bg-[#0284c7] text-white'}`}>Enter Quantity</button>
+      <button onClick={() => setModal({ type: 'discount' })} className={`${btnBase} bg-[#d97706] text-white`}>Discount</button>
+      <button onClick={() => setModal({ type: 'comment' })} className={`${btnBase} bg-[#dc2626] text-white`}>ADD Comment</button>
+      <button onClick={() => { if (orderLines.length) { const last = orderLines[orderLines.length - 1]; addItem(last.name, last.price); } }} className={`${btnBase} bg-[#0d9488] text-white`}>Repeat Order</button>
+      <button onClick={() => showToast(`Printing Bill ($${total.toFixed(2)})`)} className={`${btnBase} bg-[#3b82f6] text-slate-950`}>Print Bill</button>
+      <button onClick={() => showToast('Printing Last Receipt')} className={`${btnBase} bg-[#115e59] text-white`}>Print Receipt</button>
+      <button onClick={() => showToast('Cash Drawer Opened')} className={`${btnBase} bg-[#c2410c] text-white`}>Open Drawer</button>
+      <button onClick={() => setModal({ type: 'functions' })} className={`${btnBase} bg-[#b91c1c] text-white`}>Functions</button>
     </div>
   );
 
   const renderBeerGridHorizontal = () => (
     <div className="flex flex-col gap-1 shrink-0">
-      <div className="grid grid-cols-8 gap-1 h-10">
+      <div className="grid grid-cols-8 gap-1 h-[clamp(24px,3.6vh,40px)]">
         {TOP_BEER_ROW1.map(b => (
-          <button key={b.name} onClick={() => addItem(b.name, b.price, 'Beer', 'Beverage')} className={`${btnBase} ${b.bg} text-[11px]`}>{b.name}</button>
+          <button key={b.name} onClick={() => addItem(b.name, b.price, 'Beer', 'Beverage')} className={`${btnBase} ${b.bg}`}>{b.name}</button>
         ))}
       </div>
-      <div className="grid grid-cols-8 gap-1 h-10">
+      <div className="grid grid-cols-8 gap-1 h-[clamp(24px,3.6vh,40px)]">
         {TOP_BEER_ROW2.map(b => (
-          <button key={b.name} onClick={() => addItem(b.name, b.price, 'Beer', 'Beverage')} className={`${btnBase} ${b.bg} text-[11px]`}>{b.name}</button>
+          <button key={b.name} onClick={() => addItem(b.name, b.price, 'Beer', 'Beverage')} className={`${btnBase} ${b.bg}`}>{b.name}</button>
         ))}
       </div>
-      <div className="flex gap-1 h-20">
-        <div className="w-5 bg-slate-200 text-slate-900 font-black text-[10px] rounded flex flex-col items-center justify-center leading-none border border-slate-400 shrink-0">
+      <div className="flex gap-1 h-[clamp(48px,7.2vh,80px)]">
+        <div className="w-5 bg-slate-200 text-slate-900 font-black text-[9px] rounded flex flex-col items-center justify-center leading-none border border-slate-400 shrink-0">
           <span>B</span><span>T</span><span>L</span>
         </div>
-        <div className="flex-1 flex flex-col gap-1">
-          <div className="grid grid-cols-4 gap-1 flex-1">
+        <div className="flex-1 flex flex-col gap-1 min-h-0">
+          <div className="grid grid-cols-4 gap-1 flex-1 min-h-0">
             {TOP_BEER_ROW3_BTL.map(b => (
-              <button key={b.name} onClick={() => addItem(b.name, b.price, 'Beer', 'Beverage')} className={`${btnBase} ${b.bg} text-[11px]`}>{b.name}</button>
+              <button key={b.name} onClick={() => addItem(b.name, b.price, 'Beer', 'Beverage')} className={`${btnBase} ${b.bg}`}>{b.name}</button>
             ))}
           </div>
-          <div className="grid grid-cols-5 gap-1 flex-1">
+          <div className="grid grid-cols-5 gap-1 flex-1 min-h-0">
             {TOP_BEER_ROW4_BTL.map(b => (
-              <button key={b.name} onClick={() => addItem(b.name, b.price, 'Beer', 'Beverage')} className={`${btnBase} ${b.bg} text-[11px]`}>{b.name}</button>
+              <button key={b.name} onClick={() => addItem(b.name, b.price, 'Beer', 'Beverage')} className={`${btnBase} ${b.bg}`}>{b.name}</button>
             ))}
           </div>
         </div>
-        <div className="w-5 bg-slate-200 text-slate-900 font-black text-[10px] rounded flex flex-col items-center justify-center leading-none border border-slate-400 shrink-0">
+        <div className="w-5 bg-slate-200 text-slate-900 font-black text-[9px] rounded flex flex-col items-center justify-center leading-none border border-slate-400 shrink-0">
           <span>Q</span><span>R</span><span>T</span>
         </div>
-        <div className="w-[36%] flex flex-col gap-1 shrink-0">
-          <div className="grid grid-cols-2 gap-1 flex-1 pr-[34%]">
+        <div className="w-[36%] flex flex-col gap-1 shrink-0 min-h-0">
+          <div className="grid grid-cols-2 gap-1 flex-1 pr-[34%] min-h-0">
             {TOP_BEER_ROW3_QRT.map(b => (
-              <button key={b.name} onClick={() => addItem(b.name, b.price, 'Beer', 'Beverage')} className={`${btnBase} ${b.bg} text-[11px]`}>{b.name}</button>
+              <button key={b.name} onClick={() => addItem(b.name, b.price, 'Beer', 'Beverage')} className={`${btnBase} ${b.bg}`}>{b.name}</button>
             ))}
           </div>
-          <div className="grid grid-cols-3 gap-1 flex-1">
+          <div className="grid grid-cols-3 gap-1 flex-1 min-h-0">
             {TOP_BEER_ROW4_QRT.map(b => (
-              <button key={b.name} onClick={() => addItem(b.name, b.price, 'Beer', 'Beverage')} className={`${btnBase} ${b.bg} text-[11px]`}>{b.name}</button>
+              <button key={b.name} onClick={() => addItem(b.name, b.price, 'Beer', 'Beverage')} className={`${btnBase} ${b.bg}`}>{b.name}</button>
             ))}
-            <button onClick={() => showToast('Split Item Mode')} className={`${btnBase} bg-black text-white text-[11px]`}>Split Item</button>
+            <button onClick={() => showToast('Split Item Mode')} className={`${btnBase} bg-black text-white`}>Split Item</button>
           </div>
         </div>
       </div>
@@ -372,25 +372,25 @@ const App = () => {
   );
 
   const renderBeerGridCompact = () => (
-    <div className="flex flex-col gap-1.5 h-full overflow-y-auto custom-scrollbar pr-0.5">
-      <div className="bg-slate-900 text-amber-400 font-bold text-center py-0.5 rounded text-[11px] uppercase tracking-wider shrink-0">Tap Beers & Cider</div>
-      <div className="grid grid-cols-2 gap-1">
+    <div className="flex flex-col gap-1 h-full min-h-0">
+      <div className="bg-slate-900 text-amber-400 font-bold text-center py-0.5 rounded text-[10px] uppercase tracking-wider shrink-0">Tap Beers & Cider</div>
+      <div className="grid grid-cols-2 gap-1 flex-[8] min-h-0" style={{ gridAutoRows: '1fr' }}>
         {[...TOP_BEER_ROW1, ...TOP_BEER_ROW2].map(b => (
-          <button key={b.name} onClick={() => addItem(b.name, b.price, 'Beer', 'Beverage')} className={`${btnBase} ${b.bg} h-10 text-[11px]`}>{b.name}</button>
+          <button key={b.name} onClick={() => addItem(b.name, b.price, 'Beer', 'Beverage')} className={`${btnBase} ${b.bg} h-full`}>{b.name}</button>
         ))}
       </div>
-      <div className="bg-slate-200 text-slate-900 font-bold text-center py-0.5 rounded text-[11px] uppercase tracking-wider shrink-0">BTL & 0% / Low</div>
-      <div className="grid grid-cols-3 gap-1">
+      <div className="bg-slate-200 text-slate-900 font-bold text-center py-0.5 rounded text-[10px] uppercase tracking-wider shrink-0">BTL & 0% / Low</div>
+      <div className="grid grid-cols-3 gap-1 flex-[3] min-h-0" style={{ gridAutoRows: '1fr' }}>
         {[...TOP_BEER_ROW3_BTL, ...TOP_BEER_ROW4_BTL].map(b => (
-          <button key={b.name} onClick={() => addItem(b.name, b.price, 'Beer', 'Beverage')} className={`${btnBase} ${b.bg} h-10 text-[10px]`}>{b.name}</button>
+          <button key={b.name} onClick={() => addItem(b.name, b.price, 'Beer', 'Beverage')} className={`${btnBase} ${b.bg} h-full`}>{b.name}</button>
         ))}
       </div>
-      <div className="bg-slate-200 text-slate-900 font-bold text-center py-0.5 rounded text-[11px] uppercase tracking-wider shrink-0">QRT & Split</div>
-      <div className="grid grid-cols-3 gap-1">
+      <div className="bg-slate-200 text-slate-900 font-bold text-center py-0.5 rounded text-[10px] uppercase tracking-wider shrink-0">QRT & Split</div>
+      <div className="grid grid-cols-3 gap-1 flex-[2] min-h-0" style={{ gridAutoRows: '1fr' }}>
         {[...TOP_BEER_ROW3_QRT, ...TOP_BEER_ROW4_QRT].map(b => (
-          <button key={b.name} onClick={() => addItem(b.name, b.price, 'Beer', 'Beverage')} className={`${btnBase} ${b.bg} h-10 text-[10px]`}>{b.name}</button>
+          <button key={b.name} onClick={() => addItem(b.name, b.price, 'Beer', 'Beverage')} className={`${btnBase} ${b.bg} h-full`}>{b.name}</button>
         ))}
-        <button onClick={() => showToast('Split Item Mode')} className={`${btnBase} bg-black text-white h-10 text-[11px]`}>Split Item</button>
+        <button onClick={() => showToast('Split Item Mode')} className={`${btnBase} bg-black text-white h-full`}>Split Item</button>
       </div>
     </div>
   );
@@ -398,96 +398,100 @@ const App = () => {
   const renderSubTabs = () => (
     <>
       {mainMode === 'Beverage' && (
-        <div className="grid grid-cols-7 gap-1 h-10 shrink-0">
+        <div className="grid grid-cols-7 gap-1 h-[clamp(26px,3.7vh,40px)] shrink-0">
           {['Sparkling & White Wine', 'Red Wine', 'Spirits', "Cocktails & RTD's", 'Non Alcoholic', 'Coffee'].map(t => (
-            <button key={t} onClick={() => setSubTab(t)} className={`${btnBase} text-[12px] ${subTab === t ? 'bg-[#2563eb] text-white ring-2 ring-sky-300' : 'bg-[#1e3a8a] text-white hover:bg-blue-800'}`}>{t}</button>
+            <button key={t} onClick={() => setSubTab(t)} className={`${btnBase} ${subTab === t ? 'bg-[#2563eb] text-white ring-2 ring-sky-300' : 'bg-[#1e3a8a] text-white hover:bg-blue-800'}`}>{t}</button>
           ))}
-          <button onClick={() => setModal({ type: 'openItem', itemType: 'Beverage' })} className={`${btnBase} bg-[#fb7185] text-slate-950 text-[12px]`}>Open Drink</button>
+          <button onClick={() => setModal({ type: 'openItem', itemType: 'Beverage' })} className={`${btnBase} bg-[#fb7185] text-slate-950`}>Open Drink</button>
         </div>
       )}
 
       {mainMode === 'Lunch' && (
-        <div className="flex gap-1 h-10 shrink-0 justify-between">
+        <div className="flex gap-1 h-[clamp(26px,3.7vh,40px)] shrink-0 justify-between">
           <div className="flex gap-1 w-[45%]">
             {['Lunch', 'Kids'].map(t => (
-              <button key={t} onClick={() => setSubTab(t)} className={`${btnBase} flex-1 text-sm ${subTab === t ? 'bg-[#2563eb] text-white ring-2 ring-sky-300' : 'bg-[#1e3a8a] text-white hover:bg-blue-800'}`}>{t}</button>
+              <button key={t} onClick={() => setSubTab(t)} className={`${btnBase} flex-1 ${subTab === t ? 'bg-[#2563eb] text-white ring-2 ring-sky-300' : 'bg-[#1e3a8a] text-white hover:bg-blue-800'}`}>{t}</button>
             ))}
           </div>
-          <button onClick={() => setModal({ type: 'openItem', itemType: 'Food' })} className={`${btnBase} w-24 bg-[#fb7185] text-slate-950 text-[12px]`}>Open Food</button>
+          <button onClick={() => setModal({ type: 'openItem', itemType: 'Food' })} className={`${btnBase} w-24 bg-[#fb7185] text-slate-950`}>Open Food</button>
         </div>
       )}
 
       {mainMode === 'Dinner' && (
-        <div className="grid grid-cols-11 gap-1 h-10 shrink-0">
+        <div className="grid grid-cols-11 gap-1 h-[clamp(26px,3.7vh,40px)] shrink-0">
           {['Starters', 'Salads', 'Pizza', 'Burgers', 'Mains', 'Steaks', 'Sides', 'Dessert', 'Kids', 'SET MENU'].map(t => (
-            <button key={t} onClick={() => setSubTab(t)} className={`${btnBase} text-[11px] ${subTab === t ? 'bg-[#0284c7] text-white ring-2 ring-sky-300' : 'bg-[#1e3a8a] text-white hover:bg-blue-800'}`}>{t}</button>
+            <button key={t} onClick={() => setSubTab(t)} className={`${btnBase} ${subTab === t ? 'bg-[#0284c7] text-white ring-2 ring-sky-300' : 'bg-[#1e3a8a] text-white hover:bg-blue-800'}`}>{t}</button>
           ))}
-          <button onClick={() => setModal({ type: 'openItem', itemType: 'Food' })} className={`${btnBase} bg-[#fb7185] text-slate-950 text-[11px]`}>Open Food</button>
+          <button onClick={() => setModal({ type: 'openItem', itemType: 'Food' })} className={`${btnBase} bg-[#fb7185] text-slate-950`}>Open Food</button>
         </div>
       )}
     </>
   );
 
   const renderMenuContent = () => (
-    <div className="flex-1 min-w-0 min-h-0 overflow-y-auto custom-scrollbar pr-0.5">
+    <div className="flex-1 min-w-0 min-h-0 flex flex-col overflow-hidden">
       {mainMode === 'Beverage' && subTab === 'Sparkling & White Wine' && (
-        <div className="grid grid-cols-5 gap-1 h-full">
+        <div className="grid grid-cols-5 gap-1 h-full min-h-0">
           {WHITE_WINE_COLS.map(col => (
-            <div key={col.title} className="flex flex-col gap-1">
-              <div className="bg-white text-slate-900 font-bold text-center py-1 rounded text-xs shrink-0">{col.title}</div>
-              {col.items.map(w => (
-                <button key={w.name} onClick={() => addItem(w.name, w.price, 'White Wine', 'Beverage')} className={`${btnBase} ${w.bg} h-14 text-[12px]`}>{w.name}</button>
-              ))}
+            <div key={col.title} className="flex flex-col gap-1 h-full min-h-0">
+              <div className="bg-white text-slate-900 font-bold text-center py-0.5 rounded text-[clamp(10px,0.7vw,12px)] shrink-0">{col.title}</div>
+              <div className="grid grid-rows-6 gap-1 flex-1 min-h-0">
+                {col.items.map(w => (
+                  <button key={w.name} onClick={() => addItem(w.name, w.price, 'White Wine', 'Beverage')} className={`${btnBase} ${w.bg} h-full`}>{w.name}</button>
+                ))}
+              </div>
             </div>
           ))}
         </div>
       )}
 
       {mainMode === 'Beverage' && subTab === 'Red Wine' && (
-        <div className="flex gap-2 h-full">
-          <div className="w-[24%] flex flex-col gap-1.5">
-            <div className="bg-white text-slate-900 font-bold text-center py-1 rounded text-xs">Pinot Noir</div>
-            {[
-              { name: 'Huntaway Reserve Pinot Noir', price: 15.0 },
-              { name: 'Kopiko Bay Pinot Noir', price: 11.5 },
-              { name: 'Roaring Meg Pinot Noir', price: 16.0 },
-              { name: 'Mt Difficulty Estate Bannockburn', price: 18.0 },
-            ].map(w => (
-              <button key={w.name} onClick={() => addItem(w.name, w.price, 'Red Wine', 'Beverage')} className={`${btnBase} bg-[#93c5fd] text-slate-900 h-16 text-[12px]`}>{w.name}</button>
-            ))}
+        <div className="flex gap-2 h-full min-h-0">
+          <div className="w-[24%] flex flex-col gap-1 h-full min-h-0">
+            <div className="bg-white text-slate-900 font-bold text-center py-0.5 rounded text-[clamp(10px,0.7vw,12px)] shrink-0">Pinot Noir</div>
+            <div className="grid grid-rows-4 gap-1 flex-1 min-h-0">
+              {[
+                { name: 'Huntaway Reserve Pinot Noir', price: 15.0 },
+                { name: 'Kopiko Bay Pinot Noir', price: 11.5 },
+                { name: 'Roaring Meg Pinot Noir', price: 16.0 },
+                { name: 'Mt Difficulty Estate Bannockburn', price: 18.0 },
+              ].map(w => (
+                <button key={w.name} onClick={() => addItem(w.name, w.price, 'Red Wine', 'Beverage')} className={`${btnBase} bg-[#93c5fd] text-slate-900 h-full`}>{w.name}</button>
+              ))}
+            </div>
           </div>
-          <div className="flex-1 flex flex-col gap-1.5">
-            <div className="bg-white text-slate-900 font-bold text-center py-1 rounded text-xs">Merlot / Cab.Sav / Shiraz / Port</div>
-            <div className="grid grid-cols-4 gap-1.5">
-              <button onClick={() => addItem('House Red Merlot Kopiko Bay', 11.0, 'Red Wine')} className={`${btnBase} bg-[#fb923c] text-slate-900 h-20 text-[12px]`}>House Red Merlot Kopiko Bay</button>
-              <button onClick={() => addItem('Cabernet Sauvignon', 13.0, 'Red Wine')} className={`${btnBase} bg-[#d8b4fe] text-slate-900 h-20 text-[12px]`}>Cabernet Sauvignon</button>
-              <button onClick={() => addItem('Church Road Syrah', 15.0, 'Red Wine')} className={`${btnBase} bg-[#fdba74] text-slate-900 h-20 text-[12px]`}>Church Road Syrah</button>
-              <button onClick={() => addItem('Taylors 10 Year Tawny Port', 14.0, 'Red Wine')} className={`${btnBase} bg-[#fef08a] text-slate-900 h-20 text-[12px]`}>Taylors 10 Year Tawny Port</button>
+          <div className="flex-1 flex flex-col gap-1 min-h-0">
+            <div className="bg-white text-slate-900 font-bold text-center py-0.5 rounded text-[clamp(10px,0.7vw,12px)] shrink-0">Merlot / Cab.Sav / Shiraz / Port</div>
+            <div className="grid grid-cols-4 gap-1.5 h-1/3 min-h-[44px]">
+              <button onClick={() => addItem('House Red Merlot Kopiko Bay', 11.0, 'Red Wine')} className={`${btnBase} bg-[#fb923c] text-slate-900 h-full`}>House Red Merlot Kopiko Bay</button>
+              <button onClick={() => addItem('Cabernet Sauvignon', 13.0, 'Red Wine')} className={`${btnBase} bg-[#d8b4fe] text-slate-900 h-full`}>Cabernet Sauvignon</button>
+              <button onClick={() => addItem('Church Road Syrah', 15.0, 'Red Wine')} className={`${btnBase} bg-[#fdba74] text-slate-900 h-full`}>Church Road Syrah</button>
+              <button onClick={() => addItem('Taylors 10 Year Tawny Port', 14.0, 'Red Wine')} className={`${btnBase} bg-[#fef08a] text-slate-900 h-full`}>Taylors 10 Year Tawny Port</button>
             </div>
           </div>
         </div>
       )}
 
       {mainMode === 'Beverage' && subTab === 'Spirits' && (
-        <div className="flex flex-col gap-2 h-full">
-          <div className="grid grid-cols-7 gap-1 h-11 shrink-0">
+        <div className="flex flex-col gap-1 h-full min-h-0">
+          <div className="grid grid-cols-7 gap-1 h-[clamp(26px,3.8vh,42px)] shrink-0">
             {['Rum / Aperitif / Brandy', 'Bourbon', 'Gin', 'Scotch / Whisky', 'Tequila / Vodka', 'Liqueur / Other', 'FAST'].map(sc => (
-              <button key={sc} onClick={() => setSpiritCat(sc)} className={`${btnBase} text-[11px] ${spiritCat === sc ? 'bg-[#0284c7] text-white ring-2 ring-sky-300' : 'bg-[#1e3a8a] text-white'}`}>{sc}</button>
+              <button key={sc} onClick={() => setSpiritCat(sc)} className={`${btnBase} ${spiritCat === sc ? 'bg-[#0284c7] text-white ring-2 ring-sky-300' : 'bg-[#1e3a8a] text-white'}`}>{sc}</button>
             ))}
           </div>
-          <div className="grid grid-cols-4 gap-1.5">
+          <div className="grid grid-cols-4 gap-1 flex-1 min-h-0" style={{ gridAutoRows: '1fr' }}>
             {spiritItems.map(s => (
-              <button key={s.id} onClick={() => addItem(s.name, s.price, s.category, 'Beverage')} className={`${btnBase} bg-[#bae6fd] text-slate-900 h-14 text-[12px]`}>{s.name}</button>
+              <button key={s.id} onClick={() => addItem(s.name, s.price, s.category, 'Beverage')} className={`${btnBase} bg-[#bae6fd] text-slate-900 h-full`}>{s.name}</button>
             ))}
           </div>
         </div>
       )}
 
       {mainMode === 'Beverage' && subTab === "Cocktails & RTD's" && (
-        <div className="grid grid-cols-5 gap-1.5 h-full">
-          <div className="col-span-2 flex flex-col gap-1">
-            <div className="bg-white text-slate-900 font-bold text-center py-0.5 rounded text-xs">Cocktails</div>
-            <div className="grid grid-cols-2 gap-1">
+        <div className="grid grid-cols-5 gap-1.5 h-full min-h-0">
+          <div className="col-span-2 flex flex-col gap-1 min-h-0">
+            <div className="bg-white text-slate-900 font-bold text-center py-0.5 rounded text-[11px] shrink-0">Cocktails</div>
+            <div className="grid grid-cols-2 grid-rows-6 gap-1 flex-1 min-h-0">
               {[
                 ['Aperol Spritz', 18, 'bg-[#fde68a]'], ['Frozen Strawberry Daiquiri', 19, 'bg-[#fde68a]'],
                 ['Margarita', 19, 'bg-[#fde68a]'], ['Sex on the Beach', 18, 'bg-[#fde68a]'],
@@ -496,64 +500,67 @@ const App = () => {
                 ['Mojito', 19, 'bg-[#fde68a]'], ['Fireball Cocktail $12', 12, 'bg-[#fdba74]'],
                 ['Long Island Iced Tea', 22, 'bg-[#fde68a]'], ['Cloverless Sour (Non Alcoholic)', 12, 'bg-[#e2e8f0]'],
               ].map(([n, p, bg]) => (
-                <button key={n} onClick={() => addItem(n, p, 'Cocktails')} className={`${btnBase} ${bg} text-slate-900 h-12 text-[11px]`}>{n}</button>
+                <button key={n} onClick={() => addItem(n, p, 'Cocktails')} className={`${btnBase} ${bg} text-slate-900 h-full`}>{n}</button>
               ))}
             </div>
           </div>
-          <div className="flex flex-col gap-1">
-            <div className="bg-white text-slate-900 font-bold text-center py-0.5 rounded text-xs">Shots</div>
-            {[['Jam Donut', 12], ['Quick F*ck', 12], ["Shankey's Whip", 12], ['Fireball Shot $10', 10]].map(([n, p]) => (
-              <button key={n} onClick={() => addItem(n, p, 'Shots')} className={`${btnBase} bg-[#38bdf8] text-slate-950 h-12 text-[11px]`}>{n}</button>
-            ))}
-            <button onClick={() => showToast('Standard Pour: 30ml / Double: 60ml')} className={`${btnBase} bg-[#f0abfc] text-slate-950 h-12 text-[11px] mt-auto`}>Product Information</button>
+          <div className="flex flex-col gap-1 min-h-0">
+            <div className="bg-white text-slate-900 font-bold text-center py-0.5 rounded text-[11px] shrink-0">Shots</div>
+            <div className="grid grid-rows-6 gap-1 flex-1 min-h-0">
+              {[['Jam Donut', 12], ['Quick F*ck', 12], ["Shankey's Whip", 12], ['Fireball Shot $10', 10]].map(([n, p]) => (
+                <button key={n} onClick={() => addItem(n, p, 'Shots')} className={`${btnBase} bg-[#38bdf8] text-slate-950 h-full`}>{n}</button>
+              ))}
+              <div></div>
+              <button onClick={() => showToast('Standard Pour: 30ml / Double: 60ml')} className={`${btnBase} bg-[#f0abfc] text-slate-950 h-full`}>Product Information</button>
+            </div>
           </div>
-          <div className="col-span-2 flex flex-col gap-1">
-            <div className="bg-white text-slate-900 font-bold text-center py-0.5 rounded text-xs">RTD's</div>
-            <div className="grid grid-cols-2 gap-1">
-              <button onClick={() => addItem('Smirnoff Red RTD', 12, 'RTD')} className={`${btnBase} bg-[#f97316] text-slate-950 h-12 text-[11px]`}>Smirnoff Red RTD</button>
-              <button onClick={() => addItem('Jack Daniels & Coke RTD', 13, 'RTD')} className={`${btnBase} bg-[#1e293b] text-white h-12 text-[11px]`}>Jack Daniels & Coke RTD</button>
-              <button onClick={() => addItem('Jim Beam & Coke RTD', 12, 'RTD')} className={`${btnBase} bg-[#93c5fd] text-slate-950 h-12 text-[11px]`}>Jim Beam & Coke RTD</button>
+          <div className="col-span-2 flex flex-col gap-1 min-h-0">
+            <div className="bg-white text-slate-900 font-bold text-center py-0.5 rounded text-[11px] shrink-0">RTD's</div>
+            <div className="grid grid-cols-2 grid-rows-6 gap-1 flex-1 min-h-0">
+              <button onClick={() => addItem('Smirnoff Red RTD', 12, 'RTD')} className={`${btnBase} bg-[#f97316] text-slate-950 h-full`}>Smirnoff Red RTD</button>
+              <button onClick={() => addItem('Jack Daniels & Coke RTD', 13, 'RTD')} className={`${btnBase} bg-[#1e293b] text-white h-full`}>Jack Daniels & Coke RTD</button>
+              <button onClick={() => addItem('Jim Beam & Coke RTD', 12, 'RTD')} className={`${btnBase} bg-[#93c5fd] text-slate-950 h-full`}>Jim Beam & Coke RTD</button>
               <div></div>
-              <button onClick={() => addItem('Redbull & Jager', 14, 'RTD')} className={`${btnBase} bg-[#60a5fa] text-slate-950 h-12 text-[11px]`}>Redbull & Jager</button>
+              <button onClick={() => addItem('Redbull & Jager', 14, 'RTD')} className={`${btnBase} bg-[#60a5fa] text-slate-950 h-full`}>Redbull & Jager</button>
               <div></div>
-              <button onClick={() => addItem('Redbull & Tequila', 14, 'RTD')} className={`${btnBase} bg-[#60a5fa] text-slate-950 h-12 text-[11px]`}>Redbull & Tequila</button>
+              <button onClick={() => addItem('Redbull & Tequila', 14, 'RTD')} className={`${btnBase} bg-[#60a5fa] text-slate-950 h-full`}>Redbull & Tequila</button>
               <div></div>
-              <button onClick={() => addItem('Redbull & Vodka', 14, 'RTD')} className={`${btnBase} bg-[#60a5fa] text-slate-950 h-12 text-[11px]`}>Redbull & Vodka</button>
+              <button onClick={() => addItem('Redbull & Vodka', 14, 'RTD')} className={`${btnBase} bg-[#60a5fa] text-slate-950 h-full`}>Redbull & Vodka</button>
               <div></div>
-              <button onClick={() => addItem('Cointreau & Redbull', 15, 'RTD')} className={`${btnBase} bg-[#60a5fa] text-slate-950 h-12 text-[11px]`}>Cointreau & Redbull</button>
+              <button onClick={() => addItem('Cointreau & Redbull', 15, 'RTD')} className={`${btnBase} bg-[#60a5fa] text-slate-950 h-full`}>Cointreau & Redbull</button>
             </div>
           </div>
         </div>
       )}
 
       {mainMode === 'Beverage' && subTab === 'Non Alcoholic' && (
-        <div className="grid grid-cols-4 gap-1.5">
+        <div className="grid grid-cols-4 gap-1 h-full min-h-0" style={{ gridAutoRows: '1fr' }}>
           {nonAlcItems.map(i => (
-            <button key={i.id} onClick={() => addItem(i.name, i.price, 'Non Alcoholic')} className={`${btnBase} bg-[#a7f3d0] text-slate-900 h-14 text-[12px]`}>{i.name}</button>
+            <button key={i.id} onClick={() => addItem(i.name, i.price, 'Non Alcoholic')} className={`${btnBase} bg-[#a7f3d0] text-slate-900 h-full`}>{i.name}</button>
           ))}
         </div>
       )}
 
       {mainMode === 'Beverage' && subTab === 'Coffee' && (
-        <div className="flex flex-col gap-2">
-          <div className="bg-white text-slate-900 font-bold text-center py-0.5 rounded text-xs">Coffee</div>
-          <div className="grid grid-cols-4 gap-1.5">
+        <div className="flex flex-col gap-1.5 h-full min-h-0">
+          <div className="bg-white text-slate-900 font-bold text-center py-0.5 rounded text-[11px] shrink-0">Coffee</div>
+          <div className="grid grid-cols-4 grid-rows-2 gap-1 flex-[2] min-h-0">
             {['Flat White', 'Latte', 'Cappuchino', 'Chai Latte', 'Long Black', 'Short Black', 'Mocha', 'Hot Chocolate'].map((c, idx) => (
-              <button key={c} onClick={() => addItem(c, 5.5, 'Coffee')} className={`${btnBase} ${idx === 3 || idx === 7 ? 'bg-[#e2e8f0]' : 'bg-[#fca5a5]'} text-slate-900 h-16 text-base`}>{c}</button>
+              <button key={c} onClick={() => addItem(c, 5.5, 'Coffee')} className={`${btnBase} ${idx === 3 || idx === 7 ? 'bg-[#e2e8f0]' : 'bg-[#fca5a5]'} text-slate-900 h-full text-[clamp(11px,1vw,15px)]`}>{c}</button>
             ))}
           </div>
-          <div className="grid grid-cols-4 gap-1.5 mt-1">
-            <div className="col-span-3 flex flex-col gap-1">
-              <div className="bg-white text-slate-900 font-bold text-center py-0.5 rounded text-xs">Tea</div>
-              <div className="grid grid-cols-3 gap-1.5">
+          <div className="grid grid-cols-4 gap-1 flex-1 min-h-0">
+            <div className="col-span-3 flex flex-col gap-1 min-h-0">
+              <div className="bg-white text-slate-900 font-bold text-center py-0.5 rounded text-[11px] shrink-0">Tea</div>
+              <div className="grid grid-cols-3 gap-1 flex-1 min-h-0">
                 {['Earl Grey', 'English Breakfast', 'Green Tea'].map(t => (
-                  <button key={t} onClick={() => addItem(t, 5.0, 'Coffee')} className={`${btnBase} bg-[#67e8f9] text-slate-900 h-14 text-sm`}>{t}</button>
+                  <button key={t} onClick={() => addItem(t, 5.0, 'Coffee')} className={`${btnBase} bg-[#67e8f9] text-slate-900 h-full`}>{t}</button>
                 ))}
               </div>
             </div>
-            <div className="flex flex-col gap-1 justify-end">
+            <div className="grid grid-rows-3 gap-1 min-h-0">
               {['Caramel Shot', 'Hazelnut Shot', 'Vanilla Shot'].map(s => (
-                <button key={s} onClick={() => addItem(s, 1.0, 'Coffee')} className={`${btnBase} bg-[#dbeafe] text-slate-900 h-6 text-[11px]`}>{s}</button>
+                <button key={s} onClick={() => addItem(s, 1.0, 'Coffee')} className={`${btnBase} bg-[#dbeafe] text-slate-900 h-full`}>{s}</button>
               ))}
             </div>
           </div>
@@ -561,72 +568,79 @@ const App = () => {
       )}
 
       {mainMode === 'Lunch' && subTab === 'Lunch' && (
-        <div className="w-[70%] flex flex-col gap-1.5">
-          <div className="bg-white text-slate-900 font-bold text-center py-0.5 rounded text-xs">Lunch</div>
-          <div className="grid grid-cols-2 gap-1.5">
+        <div className="w-[70%] flex flex-col gap-1 h-full min-h-0">
+          <div className="bg-white text-slate-900 font-bold text-center py-0.5 rounded text-[11px] shrink-0">Lunch</div>
+          <div className="grid grid-cols-2 grid-rows-4 gap-1.5 flex-1 min-h-0">
             {[
               ['Toasted Sandwich w. Fries', 16.0], ['Grilled Chicken Wrap', 19.0],
               ['Hot Roast Bun w. Fries', 20.0], ['Eggs Bene', 22.0],
               ['Open Steak Sandwich w. Fries', 25.0], ['Guinness Hot Pie', 22.0],
               ['The Coasters Big Breakfast', 26.0],
             ].map(([n, p]) => (
-              <button key={n} onClick={() => addItem(n, p, 'Lunch', 'Food')} className={`${btnBase} bg-[#fed7aa] text-slate-900 h-14 text-[13px]`}>{n}</button>
+              <button key={n} onClick={() => addItem(n, p, 'Lunch', 'Food')} className={`${btnBase} bg-[#fed7aa] text-slate-900 h-full`}>{n}</button>
             ))}
           </div>
         </div>
       )}
 
       {subTab === 'Kids' && (
-        <div className="flex gap-2">
-          <div className="w-[34%] flex flex-col gap-1.5">
-            <div className="bg-white text-slate-900 font-bold text-center py-0.5 rounded text-xs">Kids Meals</div>
-            {['Kids Plate', 'Kids Pasta', 'Kids Platter'].map((k, idx) => (
-              <button key={k} onClick={() => addItem(k, 15.0, 'Kids', 'Food')} className={`${btnBase} ${idx === 0 ? 'bg-[#93c5fd]' : 'bg-[#f8fafc]'} text-slate-900 h-20 text-base`}>{k}</button>
-            ))}
+        <div className="flex gap-2 h-full min-h-0">
+          <div className="w-[34%] flex flex-col gap-1 min-h-0">
+            <div className="bg-white text-slate-900 font-bold text-center py-0.5 rounded text-[11px] shrink-0">Kids Meals</div>
+            <div className="grid grid-rows-4 gap-1 flex-1 min-h-0">
+              {['Kids Plate', 'Kids Pasta', 'Kids Platter'].map((k, idx) => (
+                <button key={k} onClick={() => addItem(k, 15.0, 'Kids', 'Food')} className={`${btnBase} ${idx === 0 ? 'bg-[#93c5fd]' : 'bg-[#f8fafc]'} text-slate-900 h-full`}>{k}</button>
+              ))}
+            </div>
           </div>
-          <div className="w-[34%] flex flex-col gap-1.5">
-            <div className="bg-white text-slate-900 font-bold text-center py-0.5 rounded text-xs">Kids Desserts</div>
-            <button onClick={() => addItem('Kids Sundae', 8.0, 'Kids', 'Food')} className={`${btnBase} bg-[#86efac] text-slate-900 h-20 text-base`}>Kids Sundae</button>
-            <button onClick={() => addItem('Kids Plate ADULTS $19', 19.0, 'Kids', 'Food')} className={`${btnBase} bg-[#dbeafe] text-slate-900 h-16 text-sm mt-8`}>Kids Plate ADULTS $19</button>
+          <div className="w-[34%] flex flex-col gap-1 min-h-0">
+            <div className="bg-white text-slate-900 font-bold text-center py-0.5 rounded text-[11px] shrink-0">Kids Desserts</div>
+            <div className="grid grid-rows-4 gap-1 flex-1 min-h-0">
+              <button onClick={() => addItem('Kids Sundae', 8.0, 'Kids', 'Food')} className={`${btnBase} bg-[#86efac] text-slate-900 h-full`}>Kids Sundae</button>
+              <div></div>
+              <button onClick={() => addItem('Kids Plate ADULTS $19', 19.0, 'Kids', 'Food')} className={`${btnBase} bg-[#dbeafe] text-slate-900 h-full`}>Kids Plate ADULTS $19</button>
+            </div>
           </div>
         </div>
       )}
 
       {mainMode === 'Dinner' && subTab === 'Starters' && (
-        <div className="flex gap-2">
-          <div className="flex-1 flex flex-col gap-1">
-            <div className="bg-white text-slate-900 font-bold text-center py-0.5 rounded text-xs">Starters</div>
-            <div className="grid grid-cols-3 gap-1.5">
+        <div className="flex gap-2 h-full min-h-0">
+          <div className="flex-1 flex flex-col gap-1 min-h-0">
+            <div className="bg-white text-slate-900 font-bold text-center py-0.5 rounded text-[11px] shrink-0">Starters</div>
+            <div className="grid grid-cols-3 grid-rows-4 gap-1 flex-1 min-h-0">
               {[
                 ['Fries', 12, 'bg-[#60a5fa]'], ['Wedges', 16, 'bg-[#60a5fa]'], ['Mini Garlic Loaf', 14, 'bg-[#fde68a]'],
                 ['Jalepeno Bites', 15, 'bg-[#fde68a]'], ['Prawn Twisters', 18, 'bg-[#fde68a]'], ['Chicken Poppers', 20, 'bg-[#fde68a]'],
                 ['Nachos', 25, 'bg-[#fde68a]'], ['Nachos Vegetarian', 23, 'bg-[#fde68a]'], ['Chilli Garlic Butter Prawns', 21, 'bg-[#fde68a]'],
                 ['Pork Belly Bites', 20, 'bg-[#fde68a]'], ['Crumbed Camembert', 18, 'bg-[#fde68a]'], ['Coasters Basket', 22, 'bg-[#7dd3fc]'],
               ].map(([n, p, bg]) => (
-                <button key={n} onClick={() => addItem(n, p, 'Starters', 'Food')} className={`${btnBase} ${bg} text-slate-900 h-14 text-[13px]`}>{n}</button>
+                <button key={n} onClick={() => addItem(n, p, 'Starters', 'Food')} className={`${btnBase} ${bg} text-slate-900 h-full`}>{n}</button>
               ))}
             </div>
           </div>
-          <div className="w-28 flex flex-col gap-1">
-            <div className="bg-white text-slate-900 font-bold text-center py-0.5 rounded text-xs">BAO BUNS</div>
-            <button onClick={() => addItem('Bao Buns', 20, 'Bao Buns', 'Food')} className={`${btnBase} bg-[#fb923c] text-slate-900 h-20 text-base`}>Bao Buns</button>
+          <div className="w-28 flex flex-col gap-1 min-h-0">
+            <div className="bg-white text-slate-900 font-bold text-center py-0.5 rounded text-[11px] shrink-0">BAO BUNS</div>
+            <button onClick={() => addItem('Bao Buns', 20, 'Bao Buns', 'Food')} className={`${btnBase} bg-[#fb923c] text-slate-900 h-1/4`}>Bao Buns</button>
           </div>
         </div>
       )}
 
       {mainMode === 'Dinner' && subTab === 'Salads' && (
-        <div className="w-[32%] flex flex-col gap-1.5">
-          <div className="bg-white text-slate-900 font-bold text-center py-0.5 rounded text-xs">Salads</div>
-          {[['Thai Salad', 22], ['Roast Vege Salad', 22], ['Pork Belly Salad', 28]].map(([n, p]) => (
-            <button key={n} onClick={() => addItem(n, p, 'Salads', 'Food')} className={`${btnBase} bg-[#86efac] text-slate-900 h-20 text-base`}>{n}</button>
-          ))}
+        <div className="w-[32%] flex flex-col gap-1 h-full min-h-0">
+          <div className="bg-white text-slate-900 font-bold text-center py-0.5 rounded text-[11px] shrink-0">Salads</div>
+          <div className="grid grid-rows-4 gap-1 flex-1 min-h-0">
+            {[['Thai Salad', 22], ['Roast Vege Salad', 22], ['Pork Belly Salad', 28]].map(([n, p]) => (
+              <button key={n} onClick={() => addItem(n, p, 'Salads', 'Food')} className={`${btnBase} bg-[#86efac] text-slate-900 h-full`}>{n}</button>
+            ))}
+          </div>
         </div>
       )}
 
       {mainMode === 'Dinner' && subTab === 'Pizza' && (
-        <div className="flex flex-col gap-1.5">
-          <div className="bg-white text-slate-900 font-bold text-center py-0.5 rounded text-xs">Pizza</div>
-          <div className="grid grid-cols-2 gap-1.5">
+        <div className="flex flex-col gap-1 h-full min-h-0">
+          <div className="bg-white text-slate-900 font-bold text-center py-0.5 rounded text-[11px] shrink-0">Pizza</div>
+          <div className="grid grid-cols-2 grid-rows-5 gap-1 flex-1 min-h-0">
             {[
               ['Cheesy Garlic Flat Bread', 16, 'bg-[#fde047]'], ['Pesto Flat Bread', 16, 'bg-[#fde047]'],
               ['Veggie Attack', 22, 'bg-[#86efac]'], ['Pepperoni Pizza', 22, 'bg-[#fca5a5]'],
@@ -634,34 +648,36 @@ const App = () => {
               ['Meatlovers Pizza', 25, 'bg-[#fdba74]'], ['Cranberry Chicken Pizza', 25, 'bg-[#fca5a5]'],
               ['DF / GF / NG Pizza Bases', 4, 'bg-[#fce7f3]'],
             ].map(([n, p, bg]) => (
-              <button key={n} onClick={() => addItem(n, p, 'Pizza', 'Food')} className={`${btnBase} ${bg} text-slate-900 h-14 text-sm`}>{n}</button>
+              <button key={n} onClick={() => addItem(n, p, 'Pizza', 'Food')} className={`${btnBase} ${bg} text-slate-900 h-full`}>{n}</button>
             ))}
           </div>
         </div>
       )}
 
       {mainMode === 'Dinner' && subTab === 'Burgers' && (
-        <div className="flex gap-4">
-          <div className="flex-1 flex flex-col gap-1.5">
-            <div className="bg-white text-slate-900 font-bold text-center py-0.5 rounded text-xs">Burgers</div>
-            <div className="grid grid-cols-2 gap-1.5">
+        <div className="flex gap-4 h-full min-h-0">
+          <div className="flex-1 flex flex-col gap-1 min-h-0">
+            <div className="bg-white text-slate-900 font-bold text-center py-0.5 rounded text-[11px] shrink-0">Burgers</div>
+            <div className="grid grid-cols-2 grid-rows-3 gap-1 flex-1 min-h-0">
               {[['Fish Burger', 25], ['Coasters Burger', 26], ['Chicken Burger', 25], ['Pork Belly Burger', 27], ['Peri Peri Burger', 27]].map(([n, p]) => (
-                <button key={n} onClick={() => addItem(n, p, 'Burgers', 'Food')} className={`${btnBase} bg-[#fed7aa] text-slate-900 h-20 text-base`}>{n}</button>
+                <button key={n} onClick={() => addItem(n, p, 'Burgers', 'Food')} className={`${btnBase} bg-[#fed7aa] text-slate-900 h-full`}>{n}</button>
               ))}
             </div>
           </div>
-          <div className="w-[30%] flex flex-col gap-1.5">
-            <div className="bg-[#dc2626] text-white font-bold text-center py-0.5 rounded text-xs">Thursday Special</div>
-            <button onClick={() => addItem('1 Burger for $22', 22, 'Burgers', 'Food')} className={`${btnBase} bg-[#f8fafc] text-slate-900 h-20 text-sm`}>1 Burger for $22</button>
-            <button onClick={() => addItem('2 Burgers for $40', 40, 'Burgers', 'Food')} className={`${btnBase} bg-[#f8fafc] text-slate-900 h-20 text-sm`}>2 Burgers for $40</button>
+          <div className="w-[30%] flex flex-col gap-1 min-h-0">
+            <div className="bg-[#dc2626] text-white font-bold text-center py-0.5 rounded text-[11px] shrink-0">Thursday Special</div>
+            <div className="grid grid-rows-3 gap-1 flex-1 min-h-0">
+              <button onClick={() => addItem('1 Burger for $22', 22, 'Burgers', 'Food')} className={`${btnBase} bg-[#f8fafc] text-slate-900 h-full`}>1 Burger for $22</button>
+              <button onClick={() => addItem('2 Burgers for $40', 40, 'Burgers', 'Food')} className={`${btnBase} bg-[#f8fafc] text-slate-900 h-full`}>2 Burgers for $40</button>
+            </div>
           </div>
         </div>
       )}
 
       {mainMode === 'Dinner' && subTab === 'Mains' && (
-        <div className="flex flex-col gap-1.5">
-          <div className="bg-white text-slate-900 font-bold text-center py-0.5 rounded text-xs">Mains</div>
-          <div className="grid grid-cols-3 gap-1.5">
+        <div className="flex flex-col gap-1 h-full min-h-0">
+          <div className="bg-white text-slate-900 font-bold text-center py-0.5 rounded text-[11px] shrink-0">Mains</div>
+          <div className="grid grid-cols-3 grid-rows-5 gap-1 flex-1 min-h-0">
             {[
               ['Bangers & Mash', 23, 'bg-[#f1f5f9]'], ['Fish & Chips', 30, 'bg-[#7dd3fc]'], ['Pork Belly', 34, 'bg-[#f1f5f9]'],
               ['Cauli Crunch', 24, 'bg-[#f1f5f9]'], ['Chicken Schnitzel', 30, 'bg-[#f1f5f9]'], ['Fish of the Day', 34, 'bg-[#7dd3fc]'],
@@ -669,38 +685,38 @@ const App = () => {
               ['Roast of the Moment', 28, 'bg-[#f1f5f9]'], ['Coasters Ribs', 30, 'bg-[#f1f5f9]'], ['Pasta', 29, 'bg-[#f1f5f9]'],
               ['Nachos Main', 25, 'bg-[#f1f5f9]'], ['Nachos Vegetarian Main', 23, 'bg-[#f1f5f9]'],
             ].map(([n, p, bg]) => (
-              <button key={n} onClick={() => addItem(n, p, 'Mains', 'Food')} className={`${btnBase} ${bg} text-slate-900 h-11 text-[13px]`}>{n}</button>
+              <button key={n} onClick={() => addItem(n, p, 'Mains', 'Food')} className={`${btnBase} ${bg} text-slate-900 h-full`}>{n}</button>
             ))}
           </div>
-          <button onClick={() => setModal({ type: 'comment' })} className={`${btnBase} w-1/3 bg-[#fca5a5] text-slate-900 h-11 text-sm mt-2`}>CHANGES</button>
+          <button onClick={() => setModal({ type: 'comment' })} className={`${btnBase} w-1/3 bg-[#fca5a5] text-slate-900 h-[clamp(26px,3.8vh,42px)] shrink-0`}>CHANGES</button>
         </div>
       )}
 
       {mainMode === 'Dinner' && subTab === 'Steaks' && (
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-3 gap-1.5 h-full min-h-0" style={{ gridAutoRows: '1fr' }}>
           {steakItems.map(i => (
-            <button key={i.id} onClick={() => addItem(i.name, i.price, 'Steaks', 'Food')} className={`${btnBase} bg-[#fca5a5] text-slate-900 h-16 text-base`}>{i.name}</button>
+            <button key={i.id} onClick={() => addItem(i.name, i.price, 'Steaks', 'Food')} className={`${btnBase} bg-[#fca5a5] text-slate-900 h-full`}>{i.name}</button>
           ))}
         </div>
       )}
       {mainMode === 'Dinner' && subTab === 'Sides' && (
-        <div className="grid grid-cols-4 gap-1.5">
+        <div className="grid grid-cols-4 gap-1 h-full min-h-0" style={{ gridAutoRows: '1fr' }}>
           {sideItems.map(i => (
-            <button key={i.id} onClick={() => addItem(i.name, i.price, 'Sides', 'Food')} className={`${btnBase} bg-[#fde68a] text-slate-900 h-14 text-[12px]`}>{i.name}</button>
+            <button key={i.id} onClick={() => addItem(i.name, i.price, 'Sides', 'Food')} className={`${btnBase} bg-[#fde68a] text-slate-900 h-full`}>{i.name}</button>
           ))}
         </div>
       )}
       {mainMode === 'Dinner' && subTab === 'Dessert' && (
-        <div className="grid grid-cols-4 gap-2">
+        <div className="grid grid-cols-4 gap-1.5 h-full min-h-0" style={{ gridAutoRows: '1fr' }}>
           {dessertItems.map(i => (
-            <button key={i.id} onClick={() => addItem(i.name, i.price, 'Desserts', 'Food')} className={`${btnBase} bg-[#f5d0fe] text-slate-900 h-16 text-sm`}>{i.name}</button>
+            <button key={i.id} onClick={() => addItem(i.name, i.price, 'Desserts', 'Food')} className={`${btnBase} bg-[#f5d0fe] text-slate-900 h-full`}>{i.name}</button>
           ))}
         </div>
       )}
       {mainMode === 'Dinner' && subTab === 'SET MENU' && (
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-3 gap-1.5 h-full min-h-0" style={{ gridAutoRows: '1fr' }}>
           {[['2 Course Set Menu', 49], ['3 Course Set Menu', 59], ['Group Banquet p/p', 65]].map(([n, p]) => (
-            <button key={n} onClick={() => addItem(n, p, 'Set Menu', 'Food')} className={`${btnBase} bg-[#c4b5fd] text-slate-900 h-16 text-sm`}>{n}</button>
+            <button key={n} onClick={() => addItem(n, p, 'Set Menu', 'Food')} className={`${btnBase} bg-[#c4b5fd] text-slate-900 h-full`}>{n}</button>
           ))}
         </div>
       )}
@@ -708,127 +724,127 @@ const App = () => {
   );
 
   const renderFinaliseCol = (horizontal = false) => (
-    <div className={horizontal ? 'grid grid-cols-5 gap-1 h-11 shrink-0' : 'w-24 flex flex-col gap-1 justify-end shrink-0'}>
-      <button onClick={() => finaliseSale('Cash', 50)} className={`${btnBase} bg-[#c7d2fe] text-slate-900 ${horizontal ? 'h-full text-[11px]' : 'h-11 text-[11px]'}`}>Finalise:{horizontal ? ' ' : <br />}50.00</button>
-      <button onClick={() => finaliseSale('Cash', 20)} className={`${btnBase} bg-[#86efac] text-slate-900 ${horizontal ? 'h-full text-[11px]' : 'h-11 text-[11px]'}`}>Finalise:{horizontal ? ' ' : <br />}20.00</button>
-      <button onClick={() => finaliseSale('Cash', 10)} className={`${btnBase} bg-[#38bdf8] text-slate-900 ${horizontal ? 'h-full text-[11px]' : 'h-11 text-[11px]'}`}>Finalise:{horizontal ? ' ' : <br />}10.00</button>
-      <button onClick={() => finaliseSale('Cash', 5)} className={`${btnBase} bg-[#fed7aa] text-slate-900 ${horizontal ? 'h-full text-[11px]' : 'h-11 text-[11px]'}`}>Finalise:{horizontal ? ' ' : <br />}5.00</button>
-      <button onClick={() => showToast(numpadVal ? `Calc: ${numpadVal}` : 'Calculator Ready')} className={`${btnBase} bg-[#1e293b] text-white ${horizontal ? 'h-full text-[11px]' : 'h-10 text-[11px]'}`}>Calculator</button>
+    <div className={horizontal ? 'grid grid-cols-5 gap-1 h-[clamp(26px,3.8vh,42px)] shrink-0' : 'w-[clamp(74px,5.8vw,96px)] flex flex-col gap-1 justify-end shrink-0'}>
+      <button onClick={() => finaliseSale('Cash', 50)} className={`${btnBase} bg-[#c7d2fe] text-slate-900 ${horizontal ? 'h-full' : 'h-[clamp(28px,4vh,44px)]'}`}>Finalise:{horizontal ? ' ' : <br />}50.00</button>
+      <button onClick={() => finaliseSale('Cash', 20)} className={`${btnBase} bg-[#86efac] text-slate-900 ${horizontal ? 'h-full' : 'h-[clamp(28px,4vh,44px)]'}`}>Finalise:{horizontal ? ' ' : <br />}20.00</button>
+      <button onClick={() => finaliseSale('Cash', 10)} className={`${btnBase} bg-[#38bdf8] text-slate-900 ${horizontal ? 'h-full' : 'h-[clamp(28px,4vh,44px)]'}`}>Finalise:{horizontal ? ' ' : <br />}10.00</button>
+      <button onClick={() => finaliseSale('Cash', 5)} className={`${btnBase} bg-[#fed7aa] text-slate-900 ${horizontal ? 'h-full' : 'h-[clamp(28px,4vh,44px)]'}`}>Finalise:{horizontal ? ' ' : <br />}5.00</button>
+      <button onClick={() => showToast(numpadVal ? `Calc: ${numpadVal}` : 'Calculator Ready')} className={`${btnBase} bg-[#1e293b] text-white ${horizontal ? 'h-full' : 'h-[clamp(26px,3.6vh,40px)]'}`}>Calculator</button>
     </div>
   );
 
   const renderBottomBar = () => (
-    <div className="grid grid-cols-8 gap-1 h-12 shrink-0">
-      <button onClick={() => setShowFloorplan(true)} className={`${btnBase} bg-[#f8fafc] text-slate-900 text-[11px]`}>TABLES /<br />TABS</button>
-      <button onClick={() => showToast(`Saved ${selectedTable}`)} className={`${btnBase} bg-[#f9a8d4] text-slate-900 text-xs`}>SAVE</button>
-      <button onClick={() => setShowFloorplan(true)} className={`${btnBase} bg-[#93c5fd] text-slate-900 text-[11px]`}>Table<br />Transfer</button>
-      <button onClick={() => showToast('Split-Bill Mode')} className={`${btnBase} bg-[#e2e8f0] text-slate-900 text-[11px]`}>Split-Bill</button>
-      <button onClick={() => finaliseSale('Partial Payment', parseFloat(numpadVal) || total / 2)} className={`${btnBase} bg-[#7dd3fc] text-slate-900 text-[11px]`}>Partial<br />Payment</button>
-      <button onClick={() => showToast('Cash-Out Recorded')} className={`${btnBase} bg-[#3b82f6] text-slate-950 text-xs`}>Cash-Out</button>
-      <button onClick={() => finaliseSale('CASH')} className={`${btnBase} bg-[#fdba74] text-slate-950 text-sm font-black`}>CASH</button>
-      <button onClick={() => finaliseSale('EFTPOS')} className={`${btnBase} bg-[#fca5a5] text-slate-950 text-sm font-black`}>EFTPOS</button>
+    <div className="grid grid-cols-8 gap-1 h-[clamp(32px,4.5vh,48px)] shrink-0">
+      <button onClick={() => setShowFloorplan(true)} className={`${btnBase} bg-[#f8fafc] text-slate-900`}>TABLES /<br />TABS</button>
+      <button onClick={() => showToast(`Saved ${selectedTable}`)} className={`${btnBase} bg-[#f9a8d4] text-slate-900`}>SAVE</button>
+      <button onClick={() => setShowFloorplan(true)} className={`${btnBase} bg-[#93c5fd] text-slate-900`}>Table<br />Transfer</button>
+      <button onClick={() => showToast('Split-Bill Mode')} className={`${btnBase} bg-[#e2e8f0] text-slate-900`}>Split-Bill</button>
+      <button onClick={() => finaliseSale('Partial Payment', parseFloat(numpadVal) || total / 2)} className={`${btnBase} bg-[#7dd3fc] text-slate-900`}>Partial<br />Payment</button>
+      <button onClick={() => showToast('Cash-Out Recorded')} className={`${btnBase} bg-[#3b82f6] text-slate-950`}>Cash-Out</button>
+      <button onClick={() => finaliseSale('CASH')} className={`${btnBase} bg-[#fdba74] text-slate-950 font-black`}>CASH</button>
+      <button onClick={() => finaliseSale('EFTPOS')} className={`${btnBase} bg-[#fca5a5] text-slate-950 font-black`}>EFTPOS</button>
     </div>
   );
 
   const renderOrderAndNumpadPane = () => (
-    <div className="w-[330px] flex flex-col gap-1 shrink-0 min-h-0">
-      <button onClick={() => setModal({ type: 'member' })} className={`${btnBase} bg-[#eab308] text-slate-950 h-10 text-base font-extrabold shrink-0`}>
+    <div className="w-[clamp(220px,18.5vw,330px)] flex flex-col gap-1 shrink-0 min-h-0">
+      <button onClick={() => setModal({ type: 'member' })} className={`${btnBase} bg-[#eab308] text-slate-950 h-[clamp(28px,3.8vh,40px)] text-[clamp(11px,0.9vw,15px)] font-extrabold shrink-0`}>
         {memberName ? `Member: ${memberName}` : 'Member'}
       </button>
 
       {/* White Receipt Box */}
       <div className="flex-1 bg-white text-slate-900 rounded border border-slate-400 flex flex-col min-h-0 overflow-hidden">
-        <div className="flex-1 overflow-y-auto custom-scrollbar p-2 space-y-1">
+        <div className="flex-1 overflow-y-auto custom-scrollbar p-1.5 space-y-1">
           {orderLines.length === 0 ? (
-            <div className="h-full flex items-center justify-center text-slate-300 font-bold uppercase tracking-widest text-sm">Empty Order</div>
+            <div className="h-full flex items-center justify-center text-slate-300 font-bold uppercase tracking-widest text-xs">Empty Order</div>
           ) : (
             orderLines.map(line => (
               <div
                 key={line.id}
                 onClick={() => setSelectedLineId(line.id)}
-                className={`flex justify-between items-start px-1.5 py-1 rounded cursor-pointer text-xs ${selectedLineId === line.id ? 'bg-sky-200 font-bold' : 'hover:bg-slate-100'}`}
+                className={`flex justify-between items-start px-1.5 py-0.5 rounded cursor-pointer text-[11px] ${selectedLineId === line.id ? 'bg-sky-200 font-bold' : 'hover:bg-slate-100'}`}
               >
-                <div className="flex-1 pr-2">
+                <div className="flex-1 pr-1.5">
                   <span className="font-bold mr-1">{line.qty}x</span>
                   <span>{line.name}</span>
-                  {line.comment && <div className="text-[10px] text-rose-600 italic pl-4">* {line.comment}</div>}
+                  {line.comment && <div className="text-[10px] text-rose-600 italic pl-3">* {line.comment}</div>}
                 </div>
                 <div className="font-mono font-bold">${(line.price * line.qty).toFixed(2)}</div>
               </div>
             ))
           )}
         </div>
-        <div className="bg-slate-200 border-t border-slate-300 px-2 py-1 text-slate-900">
-          <div className="flex justify-between font-bold text-sm">
+        <div className="bg-slate-200 border-t border-slate-300 px-2 py-0.5 text-slate-900 shrink-0">
+          <div className="flex justify-between font-bold text-xs">
             <span>{numpadVal ? `Entry: ${numpadVal}` : discountAmt > 0 ? `Disc: -$${discountAmt.toFixed(2)}` : '0.00'}</span>
             <span>Total ${total.toFixed(2)}</span>
           </div>
-          <div className="text-center text-xs text-slate-600 font-semibold">Nikko Signed On</div>
+          <div className="text-center text-[10px] text-slate-600 font-semibold">Nikko Signed On</div>
         </div>
       </div>
 
       {/* Numpad + Line Actions */}
-      <div className="grid grid-cols-4 gap-1 h-[200px] shrink-0">
+      <div className="grid grid-cols-4 grid-rows-4 gap-1 h-[clamp(124px,19vh,200px)] shrink-0">
         {['7', '8', '9'].map(k => (
-          <button key={k} onClick={() => handleNumpad(k)} className={`${btnBase} bg-[#334155] text-white text-lg`}>{k}</button>
+          <button key={k} onClick={() => handleNumpad(k)} className={`${btnBase} bg-[#334155] text-white text-[clamp(13px,1.1vw,18px)]`}>{k}</button>
         ))}
-        <button onClick={removeSelectedLine} className={`${btnBase} bg-[#fca5a5] text-slate-900 text-xs`}>Remove</button>
+        <button onClick={removeSelectedLine} className={`${btnBase} bg-[#fca5a5] text-slate-900`}>Remove</button>
 
         {['4', '5', '6'].map(k => (
-          <button key={k} onClick={() => handleNumpad(k)} className={`${btnBase} bg-[#334155] text-white text-lg`}>{k}</button>
+          <button key={k} onClick={() => handleNumpad(k)} className={`${btnBase} bg-[#334155] text-white text-[clamp(13px,1.1vw,18px)]`}>{k}</button>
         ))}
-        <button onClick={() => showToast('Course Changed')} className={`${btnBase} bg-[#38bdf8] text-slate-950 text-[11px]`}>Change<br />Course</button>
+        <button onClick={() => showToast('Course Changed')} className={`${btnBase} bg-[#38bdf8] text-slate-950`}>Change<br />Course</button>
 
         {['1', '2', '3'].map(k => (
-          <button key={k} onClick={() => handleNumpad(k)} className={`${btnBase} bg-[#334155] text-white text-lg`}>{k}</button>
+          <button key={k} onClick={() => handleNumpad(k)} className={`${btnBase} bg-[#334155] text-white text-[clamp(13px,1.1vw,18px)]`}>{k}</button>
         ))}
-        <button onClick={removeSelectedLine} className={`${btnBase} bg-[#fecaca] text-slate-900 text-xs`}>Void Item</button>
+        <button onClick={removeSelectedLine} className={`${btnBase} bg-[#fecaca] text-slate-900`}>Void Item</button>
 
         {['0', '00', 'C'].map(k => (
-          <button key={k} onClick={() => handleNumpad(k)} className={`${btnBase} bg-[#1e3a8a] text-white text-lg`}>{k}</button>
+          <button key={k} onClick={() => handleNumpad(k)} className={`${btnBase} bg-[#1e3a8a] text-white text-[clamp(13px,1.1vw,18px)]`}>{k}</button>
         ))}
-        <button onClick={() => finaliseSale('Tender')} className={`${btnBase} bg-[#86efac] text-slate-950 text-sm font-black`}>Tender</button>
+        <button onClick={() => finaliseSale('Tender')} className={`${btnBase} bg-[#86efac] text-slate-950 font-black`}>Tender</button>
       </div>
     </div>
   );
 
   return (
-    <div className="h-screen w-screen bg-[#3b4754] text-slate-100 flex flex-col overflow-hidden select-none text-[12px]">
+    <div className="h-dvh w-screen bg-[#3b4754] text-slate-100 flex flex-col overflow-hidden select-none">
       {/* Top Status Bar with View Changer */}
-      <div className="h-8 bg-[#1e242b] border-b border-slate-700 px-3 flex items-center justify-between text-xs shrink-0">
-        <div className="flex items-center space-x-3">
+      <div className="h-[clamp(26px,3vh,34px)] bg-[#1e242b] border-b border-slate-700 px-2 flex items-center justify-between text-[clamp(10px,0.7vw,12px)] shrink-0">
+        <div className="flex items-center space-x-2 shrink-0">
           <div className="flex space-x-1">
-            <span className="w-2.5 h-2.5 rounded-full bg-sky-500 inline-block"></span>
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span>
-            <span className="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span>
+            <span className="w-2 h-2 rounded-full bg-sky-500 inline-block"></span>
+            <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span>
+            <span className="w-2 h-2 rounded-full bg-amber-500 inline-block"></span>
           </div>
           <span className="font-mono font-semibold text-slate-200 whitespace-nowrap">
             {dayStr} {hh}<span className={blink ? 'opacity-100' : 'opacity-0'}>:</span>{mm}
           </span>
-          <span className="text-slate-300 font-semibold whitespace-nowrap">{selectedTable}</span>
+          <span className="text-slate-300 font-semibold whitespace-nowrap hidden sm:inline">{selectedTable}</span>
         </div>
 
         {/* VIEW CHANGER UP TOP */}
-        <div className="flex items-center space-x-1.5 bg-slate-800/90 px-2 py-0.5 rounded border border-slate-600">
-          <button onClick={cycleLayout} className="text-[11px] font-bold text-amber-400 hover:text-amber-300 pr-1 whitespace-nowrap cursor-pointer">
-            VIEW CHANGER:
+        <div className="flex items-center space-x-1 bg-slate-800/90 px-1.5 py-0.5 rounded border border-slate-600 overflow-hidden">
+          <button onClick={cycleLayout} className="text-[clamp(9px,0.65vw,11px)] font-bold text-amber-400 hover:text-amber-300 pr-1 whitespace-nowrap cursor-pointer">
+            VIEW:
           </button>
           {LAYOUT_OPTIONS.map(opt => (
             <button
               key={opt.id}
               onClick={() => { setLayoutMode(opt.id); showToast(`View: ${opt.label}`); }}
-              className={`px-2 py-0.5 rounded text-[11px] font-bold whitespace-nowrap cursor-pointer transition-colors ${layoutMode === opt.id ? 'bg-emerald-500 text-slate-950' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}`}
+              className={`px-1.5 py-0.5 rounded text-[clamp(9px,0.65vw,11px)] font-bold whitespace-nowrap cursor-pointer transition-colors ${layoutMode === opt.id ? 'bg-emerald-500 text-slate-950' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}`}
             >
               {opt.label}
             </button>
           ))}
         </div>
 
-        <div className="flex items-center space-x-4 text-slate-300">
+        <div className="flex items-center space-x-3 text-slate-300 shrink-0">
           <span className="font-bold text-slate-100">Nikko</span>
-          <span className="whitespace-nowrap">{covers} Covers &nbsp; {orderLines.reduce((s, l) => s + l.qty, 0)}</span>
-          <span className="text-slate-200 font-semibold">General</span>
-          <span className="bg-slate-700 px-2 py-0.5 rounded text-[11px] border border-slate-600">System</span>
+          <span className="whitespace-nowrap hidden md:inline">{covers} Covers &nbsp; {orderLines.reduce((s, l) => s + l.qty, 0)}</span>
+          <span className="text-slate-200 font-semibold hidden lg:inline">General</span>
+          <span className="bg-slate-700 px-1.5 py-0.5 rounded text-[10px] border border-slate-600">System</span>
         </div>
       </div>
 
@@ -872,14 +888,12 @@ const App = () => {
           <div className="flex-1 flex flex-col min-w-0 min-h-0 gap-1">
             {renderModeAndFunctions()}
             <div className="flex-1 flex min-h-0 gap-1.5">
-              {/* Left Split: Persistent Beer Grid + Quick Finalise */}
               <div className="w-[38%] flex flex-col min-h-0 gap-1 bg-slate-800/40 p-1 rounded border border-slate-600/60">
                 <div className="flex-1 min-h-0">
                   {renderBeerGridCompact()}
                 </div>
                 {renderFinaliseCol(true)}
               </div>
-              {/* Right Split: Sub-tabs + Food/Wine/Spirit Menu */}
               <div className="flex-1 flex flex-col min-w-0 min-h-0 gap-1">
                 {renderSubTabs()}
                 {renderMenuContent()}
@@ -891,54 +905,50 @@ const App = () => {
         </div>
       )}
 
-      {/* LAYOUT 4: BAR EXPRESS (1-Tap Top Beers + Instant Cash/EFTPOS Strip Beside Receipt) */}
+      {/* LAYOUT 4: BAR EXPRESS */}
       {layoutMode === 'bar-express' && (
         <div className="flex-1 flex flex-col min-h-0 p-1 gap-1">
           {renderModeAndFunctions()}
-          {/* Top Full-Width Bar Speed Strip: Beers + Instant Pay */}
           <div className="flex gap-1 shrink-0">
             <div className="flex-1 min-w-0">
               {renderBeerGridHorizontal()}
             </div>
-            <div className="w-[330px] grid grid-cols-2 gap-1 shrink-0">
-              <button onClick={() => finaliseSale('CASH')} className={`${btnBase} bg-[#fdba74] text-slate-950 text-base font-black`}>CASH</button>
-              <button onClick={() => finaliseSale('EFTPOS')} className={`${btnBase} bg-[#fca5a5] text-slate-950 text-base font-black`}>EFTPOS</button>
-              <button onClick={() => finaliseSale('Cash', 50)} className={`${btnBase} bg-[#c7d2fe] text-slate-900 text-xs`}>Finalise: 50.00</button>
-              <button onClick={() => finaliseSale('Cash', 20)} className={`${btnBase} bg-[#86efac] text-slate-900 text-xs`}>Finalise: 20.00</button>
-              <button onClick={() => finaliseSale('Cash', 10)} className={`${btnBase} bg-[#38bdf8] text-slate-900 text-xs`}>Finalise: 10.00</button>
-              <button onClick={() => finaliseSale('Cash', 5)} className={`${btnBase} bg-[#fed7aa] text-slate-900 text-xs`}>Finalise: 5.00</button>
-              <button onClick={() => setShowFloorplan(true)} className={`${btnBase} bg-[#f8fafc] text-slate-900 text-xs`}>TABLES / TABS</button>
-              <button onClick={() => showToast(`Saved ${selectedTable}`)} className={`${btnBase} bg-[#f9a8d4] text-slate-900 text-xs`}>SAVE</button>
+            <div className="w-[clamp(220px,18.5vw,330px)] grid grid-cols-2 gap-1 shrink-0">
+              <button onClick={() => finaliseSale('CASH')} className={`${btnBase} bg-[#fdba74] text-slate-950 font-black`}>CASH</button>
+              <button onClick={() => finaliseSale('EFTPOS')} className={`${btnBase} bg-[#fca5a5] text-slate-950 font-black`}>EFTPOS</button>
+              <button onClick={() => finaliseSale('Cash', 50)} className={`${btnBase} bg-[#c7d2fe] text-slate-900`}>Finalise: 50.00</button>
+              <button onClick={() => finaliseSale('Cash', 20)} className={`${btnBase} bg-[#86efac] text-slate-900`}>Finalise: 20.00</button>
+              <button onClick={() => finaliseSale('Cash', 10)} className={`${btnBase} bg-[#38bdf8] text-slate-900`}>Finalise: 10.00</button>
+              <button onClick={() => finaliseSale('Cash', 5)} className={`${btnBase} bg-[#fed7aa] text-slate-900`}>Finalise: 5.00</button>
+              <button onClick={() => setShowFloorplan(true)} className={`${btnBase} bg-[#f8fafc] text-slate-900`}>TABLES / TABS</button>
+              <button onClick={() => showToast(`Saved ${selectedTable}`)} className={`${btnBase} bg-[#f9a8d4] text-slate-900`}>SAVE</button>
             </div>
           </div>
-          {/* Lower Body: Left Receipt/Numpad + Right Wines/Spirits/Cocktails/Food */}
           <div className="flex-1 flex min-h-0 gap-1">
             {renderOrderAndNumpadPane()}
             <div className="flex-1 flex flex-col min-w-0 min-h-0 gap-1">
               {renderSubTabs()}
               {renderMenuContent()}
-              <div className="grid grid-cols-5 gap-1 h-11 shrink-0">
-                <button onClick={() => setShowFloorplan(true)} className={`${btnBase} bg-[#93c5fd] text-slate-900 text-xs`}>Table Transfer</button>
-                <button onClick={() => showToast('Split-Bill Mode')} className={`${btnBase} bg-[#e2e8f0] text-slate-900 text-xs`}>Split-Bill</button>
-                <button onClick={() => finaliseSale('Partial Payment', parseFloat(numpadVal) || total / 2)} className={`${btnBase} bg-[#7dd3fc] text-slate-900 text-xs`}>Partial Payment</button>
-                <button onClick={() => showToast('Cash-Out Recorded')} className={`${btnBase} bg-[#3b82f6] text-slate-950 text-xs`}>Cash-Out</button>
-                <button onClick={() => showToast(numpadVal ? `Calc: ${numpadVal}` : 'Calculator Ready')} className={`${btnBase} bg-[#1e293b] text-white text-xs`}>Calculator</button>
+              <div className="grid grid-cols-5 gap-1 h-[clamp(28px,4vh,44px)] shrink-0">
+                <button onClick={() => setShowFloorplan(true)} className={`${btnBase} bg-[#93c5fd] text-slate-900`}>Table Transfer</button>
+                <button onClick={() => showToast('Split-Bill Mode')} className={`${btnBase} bg-[#e2e8f0] text-slate-900`}>Split-Bill</button>
+                <button onClick={() => finaliseSale('Partial Payment', parseFloat(numpadVal) || total / 2)} className={`${btnBase} bg-[#7dd3fc] text-slate-900`}>Partial Payment</button>
+                <button onClick={() => showToast('Cash-Out Recorded')} className={`${btnBase} bg-[#3b82f6] text-slate-950`}>Cash-Out</button>
+                <button onClick={() => showToast(numpadVal ? `Calc: ${numpadVal}` : 'Calculator Ready')} className={`${btnBase} bg-[#1e293b] text-white`}>Calculator</button>
               </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* LAYOUT 5: THUMB ZONE (Bottom-Heavy Bar Ergonomics — Zero Reach Up) */}
+      {/* LAYOUT 5: THUMB ZONE */}
       {layoutMode === 'thumb-zone' && (
         <div className="flex-1 flex min-h-0 p-1 gap-1">
           <div className="flex-1 flex flex-col min-w-0 min-h-0 gap-1">
             {renderModeAndFunctions()}
-            {/* Upper Menu Area (Wines/Spirits/Cocktails/Food) */}
             <div className="flex-1 flex min-h-0 gap-1">
               {renderMenuContent()}
             </div>
-            {/* Lower Thumb-Zone: Sub-tabs -> Beer Grid -> Quick Cash -> Bottom Bar */}
             {renderSubTabs()}
             {renderBeerGridHorizontal()}
             {renderFinaliseCol(true)}
@@ -948,21 +958,19 @@ const App = () => {
         </div>
       )}
 
-      {/* LAYOUT 6: SPEED RAIL (3-Column Bartender Command: Receipt | Tap Rail | Menu) */}
+      {/* LAYOUT 6: SPEED RAIL */}
       {layoutMode === 'speed-rail' && (
         <div className="flex-1 flex min-h-0 p-1 gap-1">
           {renderOrderAndNumpadPane()}
           <div className="flex-1 flex flex-col min-w-0 min-h-0 gap-1">
             {renderModeAndFunctions()}
             <div className="flex-1 flex min-h-0 gap-1">
-              {/* Center Speed Rail: Always-visible Tap/BTL/QRT + Quick Finalise */}
               <div className="w-[36%] flex flex-col min-h-0 gap-1 bg-slate-800/50 p-1 rounded border border-slate-600/60">
                 <div className="flex-1 min-h-0">
                   {renderBeerGridCompact()}
                 </div>
                 {renderFinaliseCol(true)}
               </div>
-              {/* Right Menu Rail: Sub-tabs + Spirits/Cocktails/Wine/Food */}
               <div className="flex-1 flex flex-col min-w-0 min-h-0 gap-1">
                 {renderSubTabs()}
                 {renderMenuContent()}
