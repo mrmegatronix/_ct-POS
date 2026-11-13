@@ -157,6 +157,9 @@ const LAYOUT_OPTIONS = [
   { id: 'classic', label: '1: Classic Tevalis' },
   { id: 'left-receipt', label: '2: Left Receipt' },
   { id: 'split-speed', label: '3: Split Bar/Menu' },
+  { id: 'bar-express', label: '4: Bar Express' },
+  { id: 'thumb-zone', label: '5: Thumb Zone' },
+  { id: 'speed-rail', label: '6: Speed Rail' },
 ];
 
 const App = () => {
@@ -885,6 +888,88 @@ const App = () => {
             {renderBottomBar()}
           </div>
           {renderOrderAndNumpadPane()}
+        </div>
+      )}
+
+      {/* LAYOUT 4: BAR EXPRESS (1-Tap Top Beers + Instant Cash/EFTPOS Strip Beside Receipt) */}
+      {layoutMode === 'bar-express' && (
+        <div className="flex-1 flex flex-col min-h-0 p-1 gap-1">
+          {renderModeAndFunctions()}
+          {/* Top Full-Width Bar Speed Strip: Beers + Instant Pay */}
+          <div className="flex gap-1 shrink-0">
+            <div className="flex-1 min-w-0">
+              {renderBeerGridHorizontal()}
+            </div>
+            <div className="w-[330px] grid grid-cols-2 gap-1 shrink-0">
+              <button onClick={() => finaliseSale('CASH')} className={`${btnBase} bg-[#fdba74] text-slate-950 text-base font-black`}>CASH</button>
+              <button onClick={() => finaliseSale('EFTPOS')} className={`${btnBase} bg-[#fca5a5] text-slate-950 text-base font-black`}>EFTPOS</button>
+              <button onClick={() => finaliseSale('Cash', 50)} className={`${btnBase} bg-[#c7d2fe] text-slate-900 text-xs`}>Finalise: 50.00</button>
+              <button onClick={() => finaliseSale('Cash', 20)} className={`${btnBase} bg-[#86efac] text-slate-900 text-xs`}>Finalise: 20.00</button>
+              <button onClick={() => finaliseSale('Cash', 10)} className={`${btnBase} bg-[#38bdf8] text-slate-900 text-xs`}>Finalise: 10.00</button>
+              <button onClick={() => finaliseSale('Cash', 5)} className={`${btnBase} bg-[#fed7aa] text-slate-900 text-xs`}>Finalise: 5.00</button>
+              <button onClick={() => setShowFloorplan(true)} className={`${btnBase} bg-[#f8fafc] text-slate-900 text-xs`}>TABLES / TABS</button>
+              <button onClick={() => showToast(`Saved ${selectedTable}`)} className={`${btnBase} bg-[#f9a8d4] text-slate-900 text-xs`}>SAVE</button>
+            </div>
+          </div>
+          {/* Lower Body: Left Receipt/Numpad + Right Wines/Spirits/Cocktails/Food */}
+          <div className="flex-1 flex min-h-0 gap-1">
+            {renderOrderAndNumpadPane()}
+            <div className="flex-1 flex flex-col min-w-0 min-h-0 gap-1">
+              {renderSubTabs()}
+              {renderMenuContent()}
+              <div className="grid grid-cols-5 gap-1 h-11 shrink-0">
+                <button onClick={() => setShowFloorplan(true)} className={`${btnBase} bg-[#93c5fd] text-slate-900 text-xs`}>Table Transfer</button>
+                <button onClick={() => showToast('Split-Bill Mode')} className={`${btnBase} bg-[#e2e8f0] text-slate-900 text-xs`}>Split-Bill</button>
+                <button onClick={() => finaliseSale('Partial Payment', parseFloat(numpadVal) || total / 2)} className={`${btnBase} bg-[#7dd3fc] text-slate-900 text-xs`}>Partial Payment</button>
+                <button onClick={() => showToast('Cash-Out Recorded')} className={`${btnBase} bg-[#3b82f6] text-slate-950 text-xs`}>Cash-Out</button>
+                <button onClick={() => showToast(numpadVal ? `Calc: ${numpadVal}` : 'Calculator Ready')} className={`${btnBase} bg-[#1e293b] text-white text-xs`}>Calculator</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* LAYOUT 5: THUMB ZONE (Bottom-Heavy Bar Ergonomics — Zero Reach Up) */}
+      {layoutMode === 'thumb-zone' && (
+        <div className="flex-1 flex min-h-0 p-1 gap-1">
+          <div className="flex-1 flex flex-col min-w-0 min-h-0 gap-1">
+            {renderModeAndFunctions()}
+            {/* Upper Menu Area (Wines/Spirits/Cocktails/Food) */}
+            <div className="flex-1 flex min-h-0 gap-1">
+              {renderMenuContent()}
+            </div>
+            {/* Lower Thumb-Zone: Sub-tabs -> Beer Grid -> Quick Cash -> Bottom Bar */}
+            {renderSubTabs()}
+            {renderBeerGridHorizontal()}
+            {renderFinaliseCol(true)}
+            {renderBottomBar()}
+          </div>
+          {renderOrderAndNumpadPane()}
+        </div>
+      )}
+
+      {/* LAYOUT 6: SPEED RAIL (3-Column Bartender Command: Receipt | Tap Rail | Menu) */}
+      {layoutMode === 'speed-rail' && (
+        <div className="flex-1 flex min-h-0 p-1 gap-1">
+          {renderOrderAndNumpadPane()}
+          <div className="flex-1 flex flex-col min-w-0 min-h-0 gap-1">
+            {renderModeAndFunctions()}
+            <div className="flex-1 flex min-h-0 gap-1">
+              {/* Center Speed Rail: Always-visible Tap/BTL/QRT + Quick Finalise */}
+              <div className="w-[36%] flex flex-col min-h-0 gap-1 bg-slate-800/50 p-1 rounded border border-slate-600/60">
+                <div className="flex-1 min-h-0">
+                  {renderBeerGridCompact()}
+                </div>
+                {renderFinaliseCol(true)}
+              </div>
+              {/* Right Menu Rail: Sub-tabs + Spirits/Cocktails/Wine/Food */}
+              <div className="flex-1 flex flex-col min-w-0 min-h-0 gap-1">
+                {renderSubTabs()}
+                {renderMenuContent()}
+              </div>
+            </div>
+            {renderBottomBar()}
+          </div>
         </div>
       )}
 
