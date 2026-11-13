@@ -197,6 +197,7 @@ const LAYOUT_OPTIONS = [
   { id: 'thumb-zone', label: '5: Thumb Zone' },
   { id: 'speed-rail', label: '6: Speed Rail' },
   { id: 'nightclub', label: '7: Nightclub' },
+  { id: 'nightclub2', label: '8: Nightclub 2' },
 ];
 
 const BEVERAGE_CATEGORIES = [
@@ -247,7 +248,7 @@ const App = () => {
   const selectLayout = (id) => {
     setLayoutMode(id);
     const opt = LAYOUT_OPTIONS.find(l => l.id === id);
-    if (id === 'nightclub') {
+    if (id === 'nightclub' || id === 'nightclub2') {
       setMainMode('Beverage');
       setSubTab('FAST BAR');
     }
@@ -385,6 +386,9 @@ const App = () => {
   const sideItems = useMemo(() => POS_MENU.filter(i => i.category === 'Sides'), [POS_MENU]);
   const dessertItems = useMemo(() => POS_MENU.filter(i => i.category === 'Desserts'), [POS_MENU]);
 
+  const isPastel = layoutMode === 'nightclub2';
+  const pc = (normalCls, pastelCls) => (isPastel ? pastelCls : normalCls);
+
   // Bold auto-fit button styling
   const btnBase = 'rounded border border-slate-500/70 shadow-sm font-extrabold leading-[1.08] flex items-center justify-center text-center px-1 py-0.5 active:scale-95 transition-transform select-none cursor-pointer overflow-hidden break-words text-[clamp(8.5px,0.68vw,12px)]';
 
@@ -396,27 +400,27 @@ const App = () => {
     >
       {beverageOnly ? (
         <>
-          <div className="rounded bg-purple-900/90 border border-purple-400 text-purple-100 font-extrabold flex items-center justify-center text-center px-1 text-[clamp(9px,0.7vw,12px)] tracking-wider">NIGHTCLUB</div>
-          <button onClick={() => switchMainMode('Beverage')} className={`${btnBase} bg-[#1d4ed8] text-white ring-2 ring-sky-300 text-[clamp(10px,0.8vw,13px)]`}>Beverage</button>
+          <div className={`rounded border font-extrabold flex items-center justify-center text-center px-1 text-[clamp(9px,0.7vw,12px)] tracking-wider ${pc('bg-purple-900/90 border-purple-400 text-purple-100', 'bg-[#f5d0fe] border-pink-300 text-slate-900')}`}>NIGHTCLUB</div>
+          <button onClick={() => switchMainMode('Beverage')} className={`${btnBase} ${pc('bg-[#1d4ed8] text-white ring-2 ring-sky-300', 'bg-[#bae6fd] text-slate-900 ring-2 ring-slate-700')} text-[clamp(10px,0.8vw,13px)]`}>Beverage</button>
         </>
       ) : (
         <>
-          <button onClick={() => switchMainMode('Lunch')} className={`${btnBase} text-[clamp(10px,0.8vw,14px)] ${mainMode === 'Lunch' ? 'bg-[#1d4ed8] text-white ring-2 ring-sky-300' : 'bg-[#334155] text-slate-200 hover:bg-slate-600'}`}>Lunch</button>
-          <button onClick={() => switchMainMode('Dinner')} className={`${btnBase} text-[clamp(10px,0.8vw,14px)] ${mainMode === 'Dinner' ? 'bg-[#1d4ed8] text-white ring-2 ring-sky-300' : 'bg-[#1e3a8a] text-white hover:bg-blue-800'}`}>Dinner</button>
-          <button onClick={() => switchMainMode('Beverage')} className={`${btnBase} text-[clamp(10px,0.8vw,14px)] ${mainMode === 'Beverage' ? 'bg-[#1d4ed8] text-white ring-2 ring-sky-300' : 'bg-[#1e3a8a] text-white hover:bg-blue-800'}`}>Beverage</button>
+          <button onClick={() => switchMainMode('Lunch')} className={`${btnBase} text-[clamp(10px,0.8vw,14px)] ${mainMode === 'Lunch' ? pc('bg-[#1d4ed8] text-white ring-2 ring-sky-300', 'bg-[#bae6fd] text-slate-900 ring-2 ring-slate-700') : pc('bg-[#334155] text-slate-200 hover:bg-slate-600', 'bg-[#e2e8f0] text-slate-900')}`}>Lunch</button>
+          <button onClick={() => switchMainMode('Dinner')} className={`${btnBase} text-[clamp(10px,0.8vw,14px)] ${mainMode === 'Dinner' ? pc('bg-[#1d4ed8] text-white ring-2 ring-sky-300', 'bg-[#bae6fd] text-slate-900 ring-2 ring-slate-700') : pc('bg-[#1e3a8a] text-white hover:bg-blue-800', 'bg-[#c7d2fe] text-slate-900')}`}>Dinner</button>
+          <button onClick={() => switchMainMode('Beverage')} className={`${btnBase} text-[clamp(10px,0.8vw,14px)] ${mainMode === 'Beverage' ? pc('bg-[#1d4ed8] text-white ring-2 ring-sky-300', 'bg-[#bae6fd] text-slate-900 ring-2 ring-slate-700') : pc('bg-[#1e3a8a] text-white hover:bg-blue-800', 'bg-[#c7d2fe] text-slate-900')}`}>Beverage</button>
         </>
       )}
 
-      <button onClick={() => showToast('Chit #104 Assigned')} className={`${btnBase} bg-[#b91c1c] text-white`}>Chit Number</button>
-      <button onClick={() => showToast('Transaction Add')} className={`${btnBase} bg-[#ea580c] text-white`}>Transaction Add</button>
-      <button onClick={() => { setEnterQtyMode(!enterQtyMode); showToast(enterQtyMode ? 'Qty Mode Off' : 'Type Qty on Numpad then Tap Item'); }} className={`${btnBase} ${enterQtyMode ? 'bg-sky-400 text-slate-950 ring-2 ring-white' : 'bg-[#0284c7] text-white'}`}>Enter Quantity</button>
-      <button onClick={() => setModal({ type: 'discount' })} className={`${btnBase} bg-[#d97706] text-white`}>Discount</button>
-      <button onClick={() => setModal({ type: 'comment' })} className={`${btnBase} bg-[#dc2626] text-white`}>ADD Comment</button>
-      <button onClick={() => { if (orderLines.length) { const last = orderLines[orderLines.length - 1]; addItem(last.name, last.price); } }} className={`${btnBase} bg-[#0d9488] text-white`}>Repeat Order</button>
-      <button onClick={() => showToast(`Printing Bill ($${total.toFixed(2)})`)} className={`${btnBase} bg-[#3b82f6] text-slate-950`}>Print Bill</button>
-      <button onClick={() => showToast('Printing Last Receipt')} className={`${btnBase} bg-[#115e59] text-white`}>Print Receipt</button>
-      <button onClick={() => showToast('Cash Drawer Opened')} className={`${btnBase} bg-[#c2410c] text-white`}>Open Drawer</button>
-      <button onClick={() => setModal({ type: 'functions' })} className={`${btnBase} bg-[#b91c1c] text-white`}>Functions</button>
+      <button onClick={() => showToast('Chit #104 Assigned')} className={`${btnBase} ${pc('bg-[#b91c1c] text-white', 'bg-[#fecdd3] text-slate-900')}`}>Chit Number</button>
+      <button onClick={() => showToast('Transaction Add')} className={`${btnBase} ${pc('bg-[#ea580c] text-white', 'bg-[#fed7aa] text-slate-900')}`}>Transaction Add</button>
+      <button onClick={() => { setEnterQtyMode(!enterQtyMode); showToast(enterQtyMode ? 'Qty Mode Off' : 'Type Qty on Numpad then Tap Item'); }} className={`${btnBase} ${enterQtyMode ? 'bg-sky-300 text-slate-950 ring-2 ring-white' : pc('bg-[#0284c7] text-white', 'bg-[#bae6fd] text-slate-900')}`}>Enter Quantity</button>
+      <button onClick={() => setModal({ type: 'discount' })} className={`${btnBase} ${pc('bg-[#d97706] text-white', 'bg-[#fef08a] text-slate-900')}`}>Discount</button>
+      <button onClick={() => setModal({ type: 'comment' })} className={`${btnBase} ${pc('bg-[#dc2626] text-white', 'bg-[#fbcfe8] text-slate-900')}`}>ADD Comment</button>
+      <button onClick={() => { if (orderLines.length) { const last = orderLines[orderLines.length - 1]; addItem(last.name, last.price); } }} className={`${btnBase} ${pc('bg-[#0d9488] text-white', 'bg-[#a7f3d0] text-slate-900')}`}>Repeat Order</button>
+      <button onClick={() => showToast(`Printing Bill ($${total.toFixed(2)})`)} className={`${btnBase} ${pc('bg-[#3b82f6] text-slate-950', 'bg-[#bfdbfe] text-slate-900')}`}>Print Bill</button>
+      <button onClick={() => showToast('Printing Last Receipt')} className={`${btnBase} ${pc('bg-[#115e59] text-white', 'bg-[#99f6e4] text-slate-900')}`}>Print Receipt</button>
+      <button onClick={() => showToast('Cash Drawer Opened')} className={`${btnBase} ${pc('bg-[#c2410c] text-white', 'bg-[#ffedd5] text-slate-900')}`}>Open Drawer</button>
+      <button onClick={() => setModal({ type: 'functions' })} className={`${btnBase} ${pc('bg-[#b91c1c] text-white', 'bg-[#fecaca] text-slate-900')}`}>Functions</button>
     </div>
   );
 
@@ -468,26 +472,30 @@ const App = () => {
     </div>
   );
 
+  const PASTEL_TAP = ['bg-[#bae6fd] text-slate-900', 'bg-[#a7f3d0] text-slate-900', 'bg-[#bbf7d0] text-slate-900', 'bg-[#fecdd3] text-slate-900', 'bg-[#c7d2fe] text-slate-900', 'bg-[#ddd6fe] text-slate-900', 'bg-[#e9d5ff] text-slate-900', 'bg-[#fbcfe8] text-slate-900', 'bg-[#fed7aa] text-slate-900', 'bg-[#fef08a] text-slate-900', 'bg-[#d9f99d] text-slate-900', 'bg-[#99f6e4] text-slate-900', 'bg-[#ffedd5] text-slate-900', 'bg-[#bfdbfe] text-slate-900', 'bg-[#e2e8f0] text-slate-900', 'bg-[#a7f3d0] text-slate-900'];
+  const PASTEL_BTL = ['bg-[#fef08a] text-slate-900', 'bg-[#bbf7d0] text-slate-900', 'bg-[#a7f3d0] text-slate-900', 'bg-[#fde68a] text-slate-900', 'bg-[#fef9c3] text-slate-900', 'bg-[#fef3c7] text-slate-900', 'bg-[#d9f99d] text-slate-900', 'bg-[#dcfce7] text-slate-900', 'bg-[#e2e8f0] text-slate-900'];
+  const PASTEL_QRT = ['bg-[#fed7aa] text-slate-900', 'bg-[#fecaca] text-slate-900', 'bg-[#bae6fd] text-slate-900', 'bg-[#fde68a] text-slate-900'];
+
   const renderBeerGridCompact = () => (
     <div className="flex flex-col gap-1 h-full min-h-0">
-      <div className="bg-slate-900 text-amber-400 font-extrabold text-center py-0.5 rounded text-[10px] uppercase tracking-wider shrink-0">Tap Beers & Cider</div>
+      <div className={`${pc('bg-slate-900 text-amber-400', 'bg-[#fde68a] text-slate-900')} font-extrabold text-center py-0.5 rounded text-[10px] uppercase tracking-wider shrink-0`}>Tap Beers & Cider</div>
       <div className="grid grid-cols-2 gap-1 flex-[8] min-h-0" style={{ gridAutoRows: '1fr' }}>
-        {[...TOP_BEER_ROW1, ...TOP_BEER_ROW2].map(b => (
-          <button key={b.name} onClick={() => addItem(b.name, b.price, 'Beer', 'Beverage')} className={`${btnBase} ${b.bg} h-full`}>{b.name}</button>
+        {[...TOP_BEER_ROW1, ...TOP_BEER_ROW2].map((b, idx) => (
+          <button key={b.name} onClick={() => addItem(b.name, b.price, 'Beer', 'Beverage')} className={`${btnBase} ${isPastel ? PASTEL_TAP[idx % PASTEL_TAP.length] : b.bg} h-full`}>{b.name}</button>
         ))}
       </div>
-      <div className="bg-slate-200 text-slate-900 font-extrabold text-center py-0.5 rounded text-[10px] uppercase tracking-wider shrink-0">BTL & 0% / Low</div>
+      <div className={`${pc('bg-slate-200 text-slate-900', 'bg-[#e2e8f0] text-slate-900')} font-extrabold text-center py-0.5 rounded text-[10px] uppercase tracking-wider shrink-0`}>BTL & 0% / Low</div>
       <div className="grid grid-cols-3 gap-1 flex-[3] min-h-0" style={{ gridAutoRows: '1fr' }}>
-        {[...TOP_BEER_ROW3_BTL, ...TOP_BEER_ROW4_BTL].map(b => (
-          <button key={b.name} onClick={() => addItem(b.name, b.price, 'Beer', 'Beverage')} className={`${btnBase} ${b.bg} h-full`}>{b.name}</button>
+        {[...TOP_BEER_ROW3_BTL, ...TOP_BEER_ROW4_BTL].map((b, idx) => (
+          <button key={b.name} onClick={() => addItem(b.name, b.price, 'Beer', 'Beverage')} className={`${btnBase} ${isPastel ? PASTEL_BTL[idx % PASTEL_BTL.length] : b.bg} h-full`}>{b.name}</button>
         ))}
       </div>
-      <div className="bg-slate-200 text-slate-900 font-extrabold text-center py-0.5 rounded text-[10px] uppercase tracking-wider shrink-0">QRT & Split</div>
+      <div className={`${pc('bg-slate-200 text-slate-900', 'bg-[#e2e8f0] text-slate-900')} font-extrabold text-center py-0.5 rounded text-[10px] uppercase tracking-wider shrink-0`}>QRT & Split</div>
       <div className="grid grid-cols-3 gap-1 flex-[2] min-h-0" style={{ gridAutoRows: '1fr' }}>
-        {[...TOP_BEER_ROW3_QRT, ...TOP_BEER_ROW4_QRT].map(b => (
-          <button key={b.name} onClick={() => addItem(b.name, b.price, 'Beer', 'Beverage')} className={`${btnBase} ${b.bg} h-full`}>{b.name}</button>
+        {[...TOP_BEER_ROW3_QRT, ...TOP_BEER_ROW4_QRT].map((b, idx) => (
+          <button key={b.name} onClick={() => addItem(b.name, b.price, 'Beer', 'Beverage')} className={`${btnBase} ${isPastel ? PASTEL_QRT[idx % PASTEL_QRT.length] : b.bg} h-full`}>{b.name}</button>
         ))}
-        <button onClick={() => showToast('Split Item Mode')} className={`${btnBase} bg-black text-white h-full`}>Split Item</button>
+        <button onClick={() => showToast('Split Item Mode')} className={`${btnBase} ${pc('bg-black text-white', 'bg-[#cbd5e1] text-slate-900')} h-full`}>Split Item</button>
       </div>
     </div>
   );
@@ -497,9 +505,9 @@ const App = () => {
       {mainMode === 'Beverage' && (
         <div className="grid grid-cols-8 gap-1 h-[clamp(26px,3.7vh,40px)] shrink-0">
           {BEVERAGE_CATEGORIES.map(t => (
-            <button key={t} onClick={() => setSubTab(t)} className={`${btnBase} ${subTab === t ? (t === 'FAST BAR' ? 'bg-amber-500 text-slate-950 ring-2 ring-white' : 'bg-[#2563eb] text-white ring-2 ring-sky-300') : (t === 'FAST BAR' ? 'bg-amber-700 text-white hover:bg-amber-600' : 'bg-[#1e3a8a] text-white hover:bg-blue-800')}`}>{t}</button>
+            <button key={t} onClick={() => setSubTab(t)} className={`${btnBase} ${subTab === t ? (t === 'FAST BAR' ? pc('bg-amber-500 text-slate-950 ring-2 ring-white', 'bg-[#fde68a] text-slate-900 ring-2 ring-slate-700') : pc('bg-[#2563eb] text-white ring-2 ring-sky-300', 'bg-[#bae6fd] text-slate-900 ring-2 ring-slate-700')) : (t === 'FAST BAR' ? pc('bg-amber-700 text-white hover:bg-amber-600', 'bg-[#fef3c7] text-slate-900') : pc('bg-[#1e3a8a] text-white hover:bg-blue-800', 'bg-[#ddd6fe] text-slate-900'))}`}>{t}</button>
           ))}
-          <button onClick={() => setModal({ type: 'openItem', itemType: 'Beverage' })} className={`${btnBase} bg-[#fb7185] text-slate-950`}>Open Drink</button>
+          <button onClick={() => setModal({ type: 'openItem', itemType: 'Beverage' })} className={`${btnBase} ${pc('bg-[#fb7185] text-slate-950', 'bg-[#fecdd3] text-slate-900')}`}>Open Drink</button>
         </div>
       )}
 
@@ -532,7 +540,7 @@ const App = () => {
         <div className="flex flex-col gap-1 h-full min-h-0">
           {/* Row 1: House Wines (Kopiko Bay) - Rose/Gold Theme */}
           <div className="flex flex-col gap-0.5 flex-[1.1] min-h-0">
-            <div className="bg-amber-500 text-slate-950 font-extrabold text-center py-0.5 rounded text-[10px] uppercase tracking-wider shrink-0">House Wines — Kopiko Bay</div>
+            <div className={`${pc('bg-amber-500 text-slate-950', 'bg-[#fef08a] text-slate-900')} font-extrabold text-center py-0.5 rounded text-[10px] uppercase tracking-wider shrink-0`}>House Wines — Kopiko Bay</div>
             <div className="grid grid-cols-5 gap-1 flex-1 min-h-0">
               {[
                 ['House Sav Kopiko Bay', 11.0],
@@ -541,19 +549,19 @@ const App = () => {
                 ['House Red Merlot Kopiko Bay', 11.0],
                 ['Kopiko Bay Pinot Noir', 11.5],
               ].map(([n, p]) => (
-                <button key={n} onClick={() => addItem(n, p, 'Wine', 'Beverage')} className={`${btnBase} bg-[#fde68a] text-slate-950 h-full`}>{n}</button>
+                <button key={n} onClick={() => addItem(n, p, 'Wine', 'Beverage')} className={`${btnBase} ${pc('bg-[#fde68a] text-slate-950', 'bg-[#fef9c3] text-slate-900')} h-full`}>{n}</button>
               ))}
             </div>
           </div>
 
           {/* Row 2: House Spirits (15ml / 30ml Popup) - Indigo Theme */}
           <div className="flex flex-col gap-0.5 flex-[1.2] min-h-0">
-            <div className="bg-indigo-600 text-white font-extrabold text-center py-0.5 rounded text-[10px] uppercase tracking-wider shrink-0">House Spirits (Tap for 15ml / 30ml)</div>
+            <div className={`${pc('bg-indigo-600 text-white', 'bg-[#c7d2fe] text-slate-900')} font-extrabold text-center py-0.5 rounded text-[10px] uppercase tracking-wider shrink-0`}>House Spirits (Tap for 15ml / 30ml)</div>
             <div className="grid grid-cols-6 gap-1 flex-1 min-h-0">
               {fastBarSpirits.map(sp => (
-                <button key={sp.id} onClick={() => handleSpiritClick(sp)} className={`${btnBase} bg-[#4f46e5] text-white hover:bg-indigo-500 h-full flex-col`}>
+                <button key={sp.id} onClick={() => handleSpiritClick(sp)} className={`${btnBase} ${pc('bg-[#4f46e5] text-white hover:bg-indigo-500', 'bg-[#ddd6fe] text-slate-900 hover:bg-[#c7d2fe]')} h-full flex-col`}>
                   <span>{sp.baseName}</span>
-                  <span className="text-[8px] text-indigo-200 font-bold">15 / 30ml</span>
+                  <span className={`text-[8px] font-bold ${pc('text-indigo-200', 'text-slate-600')}`}>15 / 30ml</span>
                 </button>
               ))}
             </div>
@@ -562,38 +570,38 @@ const App = () => {
           {/* Row 3: RTDs (Orange) + Shots (Cyan) + Redbull Cocktails (Violet) */}
           <div className="grid grid-cols-3 gap-1 flex-[1.5] min-h-0">
             <div className="flex flex-col gap-0.5 min-h-0">
-              <div className="bg-orange-500 text-slate-950 font-extrabold text-center py-0.5 rounded text-[10px] uppercase shrink-0">RTD's</div>
+              <div className={`${pc('bg-orange-500 text-slate-950', 'bg-[#fed7aa] text-slate-900')} font-extrabold text-center py-0.5 rounded text-[10px] uppercase shrink-0`}>RTD's</div>
               <div className="grid grid-rows-3 gap-1 flex-1 min-h-0">
-                <button onClick={() => addItem('Jim Beam & Coke RTD', 12, 'RTD')} className={`${btnBase} bg-[#fb923c] text-slate-950 h-full`}>Jim Beam & Coke RTD</button>
-                <button onClick={() => addItem('Jack Daniels & Coke RTD', 13, 'RTD')} className={`${btnBase} bg-[#f97316] text-slate-950 h-full`}>Jack Daniels & Coke RTD</button>
-                <button onClick={() => addItem('Smirnoff Red RTD', 12, 'RTD')} className={`${btnBase} bg-[#fdba74] text-slate-950 h-full`}>Smirnoff Red RTD</button>
+                <button onClick={() => addItem('Jim Beam & Coke RTD', 12, 'RTD')} className={`${btnBase} ${pc('bg-[#fb923c] text-slate-950', 'bg-[#ffedd5] text-slate-900')} h-full`}>Jim Beam & Coke RTD</button>
+                <button onClick={() => addItem('Jack Daniels & Coke RTD', 13, 'RTD')} className={`${btnBase} ${pc('bg-[#f97316] text-slate-950', 'bg-[#fed7aa] text-slate-900')} h-full`}>Jack Daniels & Coke RTD</button>
+                <button onClick={() => addItem('Smirnoff Red RTD', 12, 'RTD')} className={`${btnBase} ${pc('bg-[#fdba74] text-slate-950', 'bg-[#ffedd5] text-slate-900')} h-full`}>Smirnoff Red RTD</button>
               </div>
             </div>
             <div className="flex flex-col gap-0.5 min-h-0">
-              <div className="bg-cyan-500 text-slate-950 font-extrabold text-center py-0.5 rounded text-[10px] uppercase shrink-0">Shots</div>
+              <div className={`${pc('bg-cyan-500 text-slate-950', 'bg-[#bae6fd] text-slate-900')} font-extrabold text-center py-0.5 rounded text-[10px] uppercase shrink-0`}>Shots</div>
               <div className="grid grid-cols-2 grid-rows-2 gap-1 flex-1 min-h-0">
-                <button onClick={() => addItem('Jam Donut', 12, 'Shots')} className={`${btnBase} bg-[#38bdf8] text-slate-950 h-full`}>Jam Donut</button>
-                <button onClick={() => addItem('Quick F*ck', 12, 'Shots')} className={`${btnBase} bg-[#38bdf8] text-slate-950 h-full`}>Quick F*ck</button>
-                <button onClick={() => addItem("Shankey's Whip", 12, 'Shots')} className={`${btnBase} bg-[#0ea5e9] text-white h-full`}>Shankey's Whip</button>
-                <button onClick={() => addItem('Fireball Shot $10', 10, 'Shots')} className={`${btnBase} bg-[#0ea5e9] text-white h-full`}>Fireball Shot $10</button>
+                <button onClick={() => addItem('Jam Donut', 12, 'Shots')} className={`${btnBase} ${pc('bg-[#38bdf8] text-slate-950', 'bg-[#e0f2fe] text-slate-900')} h-full`}>Jam Donut</button>
+                <button onClick={() => addItem('Quick F*ck', 12, 'Shots')} className={`${btnBase} ${pc('bg-[#38bdf8] text-slate-950', 'bg-[#e0f2fe] text-slate-900')} h-full`}>Quick F*ck</button>
+                <button onClick={() => addItem("Shankey's Whip", 12, 'Shots')} className={`${btnBase} ${pc('bg-[#0ea5e9] text-white', 'bg-[#bae6fd] text-slate-900')} h-full`}>Shankey's Whip</button>
+                <button onClick={() => addItem('Fireball Shot $10', 10, 'Shots')} className={`${btnBase} ${pc('bg-[#0ea5e9] text-white', 'bg-[#bae6fd] text-slate-900')} h-full`}>Fireball Shot $10</button>
               </div>
             </div>
             <div className="flex flex-col gap-0.5 min-h-0">
-              <div className="bg-purple-600 text-white font-extrabold text-center py-0.5 rounded text-[10px] uppercase shrink-0">Redbull Cocktails</div>
+              <div className={`${pc('bg-purple-600 text-white', 'bg-[#e9d5ff] text-slate-900')} font-extrabold text-center py-0.5 rounded text-[10px] uppercase shrink-0`}>Redbull Cocktails</div>
               <div className="grid grid-rows-3 gap-1 flex-1 min-h-0">
-                <button onClick={() => addItem('Redbull & Vodka', 14, 'Cocktails')} className={`${btnBase} bg-[#a855f7] text-white h-full`}>Redbull & Vodka</button>
-                <button onClick={() => addItem('Redbull & Jager', 14, 'Cocktails')} className={`${btnBase} bg-[#9333ea] text-white h-full`}>Redbull & Jager</button>
-                <button onClick={() => addItem('Redbull & Tequila', 14, 'Cocktails')} className={`${btnBase} bg-[#7e22ce] text-white h-full`}>Redbull & Tequila</button>
+                <button onClick={() => addItem('Redbull & Vodka', 14, 'Cocktails')} className={`${btnBase} ${pc('bg-[#a855f7] text-white', 'bg-[#f3e8ff] text-slate-900')} h-full`}>Redbull & Vodka</button>
+                <button onClick={() => addItem('Redbull & Jager', 14, 'Cocktails')} className={`${btnBase} ${pc('bg-[#9333ea] text-white', 'bg-[#e9d5ff] text-slate-900')} h-full`}>Redbull & Jager</button>
+                <button onClick={() => addItem('Redbull & Tequila', 14, 'Cocktails')} className={`${btnBase} ${pc('bg-[#7e22ce] text-white', 'bg-[#f3e8ff] text-slate-900')} h-full`}>Redbull & Tequila</button>
               </div>
             </div>
           </div>
 
           {/* Row 4: Non Alcoholics (All fit) - Emerald/Mint Theme */}
           <div className="flex flex-col gap-0.5 flex-[1.8] min-h-0">
-            <div className="bg-emerald-500 text-slate-950 font-extrabold text-center py-0.5 rounded text-[10px] uppercase tracking-wider shrink-0">Non Alcoholic</div>
+            <div className={`${pc('bg-emerald-500 text-slate-950', 'bg-[#a7f3d0] text-slate-900')} font-extrabold text-center py-0.5 rounded text-[10px] uppercase tracking-wider shrink-0`}>Non Alcoholic</div>
             <div className="grid grid-cols-4 grid-rows-4 gap-1 flex-1 min-h-0">
               {fastBarNonAlc.map(([n, p]) => (
-                <button key={n} onClick={() => addItem(n, p, 'Non Alcoholic')} className={`${btnBase} bg-[#6ee7b7] text-slate-950 h-full`}>{n}</button>
+                <button key={n} onClick={() => addItem(n, p, 'Non Alcoholic')} className={`${btnBase} ${pc('bg-[#6ee7b7] text-slate-950', 'bg-[#d1fae5] text-slate-900')} h-full`}>{n}</button>
               ))}
             </div>
           </div>
@@ -904,30 +912,30 @@ const App = () => {
 
   const renderFinaliseCol = (horizontal = false) => (
     <div className={horizontal ? 'grid grid-cols-5 gap-1 h-[clamp(26px,3.8vh,42px)] shrink-0' : 'w-[clamp(74px,5.8vw,96px)] flex flex-col gap-1 justify-end shrink-0'}>
-      <button onClick={() => finaliseSale('Cash', 50)} className={`${btnBase} bg-[#c7d2fe] text-slate-900 ${horizontal ? 'h-full' : 'h-[clamp(28px,4vh,44px)]'}`}>Finalise:{horizontal ? ' ' : <br />}50.00</button>
-      <button onClick={() => finaliseSale('Cash', 20)} className={`${btnBase} bg-[#86efac] text-slate-900 ${horizontal ? 'h-full' : 'h-[clamp(28px,4vh,44px)]'}`}>Finalise:{horizontal ? ' ' : <br />}20.00</button>
-      <button onClick={() => finaliseSale('Cash', 10)} className={`${btnBase} bg-[#38bdf8] text-slate-900 ${horizontal ? 'h-full' : 'h-[clamp(28px,4vh,44px)]'}`}>Finalise:{horizontal ? ' ' : <br />}10.00</button>
-      <button onClick={() => finaliseSale('Cash', 5)} className={`${btnBase} bg-[#fed7aa] text-slate-900 ${horizontal ? 'h-full' : 'h-[clamp(28px,4vh,44px)]'}`}>Finalise:{horizontal ? ' ' : <br />}5.00</button>
-      <button onClick={() => showToast(numpadVal ? `Calc: ${numpadVal}` : 'Calculator Ready')} className={`${btnBase} bg-[#1e293b] text-white ${horizontal ? 'h-full' : 'h-[clamp(26px,3.6vh,40px)]'}`}>Calculator</button>
+      <button onClick={() => finaliseSale('Cash', 50)} className={`${btnBase} ${pc('bg-[#c7d2fe] text-slate-900', 'bg-[#e0e7ff] text-slate-900')} ${horizontal ? 'h-full' : 'h-[clamp(28px,4vh,44px)]'}`}>Finalise:{horizontal ? ' ' : <br />}50.00</button>
+      <button onClick={() => finaliseSale('Cash', 20)} className={`${btnBase} ${pc('bg-[#86efac] text-slate-900', 'bg-[#dcfce7] text-slate-900')} ${horizontal ? 'h-full' : 'h-[clamp(28px,4vh,44px)]'}`}>Finalise:{horizontal ? ' ' : <br />}20.00</button>
+      <button onClick={() => finaliseSale('Cash', 10)} className={`${btnBase} ${pc('bg-[#38bdf8] text-slate-900', 'bg-[#e0f2fe] text-slate-900')} ${horizontal ? 'h-full' : 'h-[clamp(28px,4vh,44px)]'}`}>Finalise:{horizontal ? ' ' : <br />}10.00</button>
+      <button onClick={() => finaliseSale('Cash', 5)} className={`${btnBase} ${pc('bg-[#fed7aa] text-slate-900', 'bg-[#ffedd5] text-slate-900')} ${horizontal ? 'h-full' : 'h-[clamp(28px,4vh,44px)]'}`}>Finalise:{horizontal ? ' ' : <br />}5.00</button>
+      <button onClick={() => showToast(numpadVal ? `Calc: ${numpadVal}` : 'Calculator Ready')} className={`${btnBase} ${pc('bg-[#1e293b] text-white', 'bg-[#e2e8f0] text-slate-900')} ${horizontal ? 'h-full' : 'h-[clamp(26px,3.6vh,40px)]'}`}>Calculator</button>
     </div>
   );
 
   const renderBottomBar = () => (
     <div className="grid grid-cols-8 gap-1 h-[clamp(32px,4.5vh,48px)] shrink-0">
-      <button onClick={() => setShowFloorplan(true)} className={`${btnBase} bg-[#f8fafc] text-slate-900`}>TABLES /<br />TABS</button>
-      <button onClick={() => showToast(`Saved ${selectedTable}`)} className={`${btnBase} bg-[#f9a8d4] text-slate-900`}>SAVE</button>
-      <button onClick={() => setShowFloorplan(true)} className={`${btnBase} bg-[#93c5fd] text-slate-900`}>Table<br />Transfer</button>
-      <button onClick={() => showToast('Split-Bill Mode')} className={`${btnBase} bg-[#e2e8f0] text-slate-900`}>Split-Bill</button>
-      <button onClick={() => finaliseSale('Partial Payment', parseFloat(numpadVal) || total / 2)} className={`${btnBase} bg-[#7dd3fc] text-slate-900`}>Partial<br />Payment</button>
-      <button onClick={() => showToast('Cash-Out Recorded')} className={`${btnBase} bg-[#3b82f6] text-slate-950`}>Cash-Out</button>
-      <button onClick={() => finaliseSale('CASH')} className={`${btnBase} bg-[#fdba74] text-slate-950 font-black`}>CASH</button>
-      <button onClick={() => finaliseSale('EFTPOS')} className={`${btnBase} bg-[#fca5a5] text-slate-950 font-black`}>EFTPOS</button>
+      <button onClick={() => setShowFloorplan(true)} className={`${btnBase} ${pc('bg-[#f8fafc] text-slate-900', 'bg-[#f1f5f9] text-slate-900')}`}>TABLES /<br />TABS</button>
+      <button onClick={() => showToast(`Saved ${selectedTable}`)} className={`${btnBase} ${pc('bg-[#f9a8d4] text-slate-900', 'bg-[#fbcfe8] text-slate-900')}`}>SAVE</button>
+      <button onClick={() => setShowFloorplan(true)} className={`${btnBase} ${pc('bg-[#93c5fd] text-slate-900', 'bg-[#dbeafe] text-slate-900')}`}>Table<br />Transfer</button>
+      <button onClick={() => showToast('Split-Bill Mode')} className={`${btnBase} ${pc('bg-[#e2e8f0] text-slate-900', 'bg-[#f3e8ff] text-slate-900')}`}>Split-Bill</button>
+      <button onClick={() => finaliseSale('Partial Payment', parseFloat(numpadVal) || total / 2)} className={`${btnBase} ${pc('bg-[#7dd3fc] text-slate-900', 'bg-[#e0f2fe] text-slate-900')}`}>Partial<br />Payment</button>
+      <button onClick={() => showToast('Cash-Out Recorded')} className={`${btnBase} ${pc('bg-[#3b82f6] text-slate-950', 'bg-[#c7d2fe] text-slate-900')}`}>Cash-Out</button>
+      <button onClick={() => finaliseSale('CASH')} className={`${btnBase} ${pc('bg-[#fdba74] text-slate-950', 'bg-[#fed7aa] text-slate-900')} font-black`}>CASH</button>
+      <button onClick={() => finaliseSale('EFTPOS')} className={`${btnBase} ${pc('bg-[#fca5a5] text-slate-950', 'bg-[#fecdd3] text-slate-900')} font-black`}>EFTPOS</button>
     </div>
   );
 
   const renderOrderAndNumpadPane = () => (
     <div className="w-[clamp(220px,18.5vw,330px)] flex flex-col gap-1 shrink-0 min-h-0">
-      <button onClick={() => setModal({ type: 'member' })} className={`${btnBase} bg-[#eab308] text-slate-950 h-[clamp(28px,3.8vh,40px)] text-[clamp(11px,0.9vw,15px)] font-extrabold shrink-0`}>
+      <button onClick={() => setModal({ type: 'member' })} className={`${btnBase} ${pc('bg-[#eab308] text-slate-950', 'bg-[#fef08a] text-slate-900')} h-[clamp(28px,3.8vh,40px)] text-[clamp(11px,0.9vw,15px)] font-extrabold shrink-0`}>
         {memberName ? `Member: ${memberName}` : 'Member'}
       </button>
 
@@ -965,24 +973,24 @@ const App = () => {
       {/* Numpad + Line Actions */}
       <div className="grid grid-cols-4 grid-rows-4 gap-1 h-[clamp(124px,19vh,200px)] shrink-0">
         {['7', '8', '9'].map(k => (
-          <button key={k} onClick={() => handleNumpad(k)} className={`${btnBase} bg-[#334155] text-white text-[clamp(13px,1.1vw,18px)]`}>{k}</button>
+          <button key={k} onClick={() => handleNumpad(k)} className={`${btnBase} ${pc('bg-[#334155] text-white', 'bg-[#e2e8f0] text-slate-900')} text-[clamp(13px,1.1vw,18px)]`}>{k}</button>
         ))}
-        <button onClick={removeSelectedLine} className={`${btnBase} bg-[#fca5a5] text-slate-900`}>Remove</button>
+        <button onClick={removeSelectedLine} className={`${btnBase} ${pc('bg-[#fca5a5] text-slate-900', 'bg-[#fecdd3] text-slate-900')}`}>Remove</button>
 
         {['4', '5', '6'].map(k => (
-          <button key={k} onClick={() => handleNumpad(k)} className={`${btnBase} bg-[#334155] text-white text-[clamp(13px,1.1vw,18px)]`}>{k}</button>
+          <button key={k} onClick={() => handleNumpad(k)} className={`${btnBase} ${pc('bg-[#334155] text-white', 'bg-[#e2e8f0] text-slate-900')} text-[clamp(13px,1.1vw,18px)]`}>{k}</button>
         ))}
-        <button onClick={() => showToast('Course Changed')} className={`${btnBase} bg-[#38bdf8] text-slate-950`}>Change<br />Course</button>
+        <button onClick={() => showToast('Course Changed')} className={`${btnBase} ${pc('bg-[#38bdf8] text-slate-950', 'bg-[#bae6fd] text-slate-900')}`}>Change<br />Course</button>
 
         {['1', '2', '3'].map(k => (
-          <button key={k} onClick={() => handleNumpad(k)} className={`${btnBase} bg-[#334155] text-white text-[clamp(13px,1.1vw,18px)]`}>{k}</button>
+          <button key={k} onClick={() => handleNumpad(k)} className={`${btnBase} ${pc('bg-[#334155] text-white', 'bg-[#e2e8f0] text-slate-900')} text-[clamp(13px,1.1vw,18px)]`}>{k}</button>
         ))}
-        <button onClick={removeSelectedLine} className={`${btnBase} bg-[#fecaca] text-slate-900`}>Void Item</button>
+        <button onClick={removeSelectedLine} className={`${btnBase} ${pc('bg-[#fecaca] text-slate-900', 'bg-[#ffe4e6] text-slate-900')}`}>Void Item</button>
 
         {['0', '00', 'C'].map(k => (
-          <button key={k} onClick={() => handleNumpad(k)} className={`${btnBase} bg-[#1e3a8a] text-white text-[clamp(13px,1.1vw,18px)]`}>{k}</button>
+          <button key={k} onClick={() => handleNumpad(k)} className={`${btnBase} ${pc('bg-[#1e3a8a] text-white', 'bg-[#c7d2fe] text-slate-900')} text-[clamp(13px,1.1vw,18px)]`}>{k}</button>
         ))}
-        <button onClick={() => finaliseSale('Tender')} className={`${btnBase} bg-[#86efac] text-slate-950 font-black`}>Tender</button>
+        <button onClick={() => finaliseSale('Tender')} className={`${btnBase} ${pc('bg-[#86efac] text-slate-950', 'bg-[#bbf7d0] text-slate-900')} font-black`}>Tender</button>
       </div>
     </div>
   );
@@ -1199,6 +1207,30 @@ const App = () => {
             {renderBottomBar()}
           </div>
 
+          {/* FAR RIGHT: Receipt Order List & Numpad */}
+          {renderOrderAndNumpadPane()}
+        </div>
+      )}
+
+      {/* LAYOUT 8: NIGHTCLUB 2 (Speed Rail Copy, Pastel Colours, Far-Right Receipt) */}
+      {layoutMode === 'nightclub2' && (
+        <div className="flex-1 flex min-h-0 p-1 gap-1">
+          <div className="flex-1 flex flex-col min-w-0 min-h-0 gap-1">
+            {renderModeAndFunctions(true)}
+            <div className="flex-1 flex min-h-0 gap-1">
+              <div className="w-[36%] flex flex-col min-h-0 gap-1 bg-slate-800/40 p-1 rounded border border-slate-500/50">
+                <div className="flex-1 min-h-0">
+                  {renderBeerGridCompact()}
+                </div>
+                {renderFinaliseCol(true)}
+              </div>
+              <div className="flex-1 flex flex-col min-w-0 min-h-0 gap-1">
+                {renderSubTabs()}
+                {renderMenuContent()}
+              </div>
+            </div>
+            {renderBottomBar()}
+          </div>
           {/* FAR RIGHT: Receipt Order List & Numpad */}
           {renderOrderAndNumpadPane()}
         </div>
