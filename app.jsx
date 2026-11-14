@@ -472,28 +472,35 @@ const App = () => {
     </div>
   );
 
-  const PASTEL_TAP = ['bg-[#bae6fd] text-slate-900', 'bg-[#a7f3d0] text-slate-900', 'bg-[#bbf7d0] text-slate-900', 'bg-[#fecdd3] text-slate-900', 'bg-[#c7d2fe] text-slate-900', 'bg-[#ddd6fe] text-slate-900', 'bg-[#e9d5ff] text-slate-900', 'bg-[#fbcfe8] text-slate-900', 'bg-[#fed7aa] text-slate-900', 'bg-[#fef08a] text-slate-900', 'bg-[#d9f99d] text-slate-900', 'bg-[#99f6e4] text-slate-900', 'bg-[#ffedd5] text-slate-900', 'bg-[#bfdbfe] text-slate-900', 'bg-[#e2e8f0] text-slate-900', 'bg-[#a7f3d0] text-slate-900'];
-  const PASTEL_BTL = ['bg-[#fef08a] text-slate-900', 'bg-[#bbf7d0] text-slate-900', 'bg-[#a7f3d0] text-slate-900', 'bg-[#fde68a] text-slate-900', 'bg-[#fef9c3] text-slate-900', 'bg-[#fef3c7] text-slate-900', 'bg-[#d9f99d] text-slate-900', 'bg-[#dcfce7] text-slate-900', 'bg-[#e2e8f0] text-slate-900'];
-  const PASTEL_QRT = ['bg-[#fed7aa] text-slate-900', 'bg-[#fecaca] text-slate-900', 'bg-[#bae6fd] text-slate-900', 'bg-[#fde68a] text-slate-900'];
+  const getPastelTapBg = (name) => {
+    if (name.includes('Cider') || name.includes('Pink Gin') || name.includes('Hyoketsu')) return 'bg-[#fbcfe8] text-slate-900';
+    if (name.includes('Panhead')) return 'bg-[#c7d2fe] text-slate-900';
+    return 'bg-[#bae6fd] text-slate-900';
+  };
+  const getPastelBtlBg = (name) => {
+    if (name.includes('0%') || name.includes('2.5%')) return 'bg-[#fef08a] text-slate-900';
+    return 'bg-[#bbf7d0] text-slate-900';
+  };
+  const getPastelQrtBg = () => 'bg-[#fed7aa] text-slate-900';
 
   const renderBeerGridCompact = () => (
     <div className="flex flex-col gap-1 h-full min-h-0">
-      <div className={`${pc('bg-slate-900 text-amber-400', 'bg-[#fde68a] text-slate-900')} font-extrabold text-center py-0.5 rounded text-[10px] uppercase tracking-wider shrink-0`}>Tap Beers & Cider</div>
+      <div className={`${pc('bg-slate-900 text-amber-400', 'bg-[#bae6fd] text-slate-900')} font-extrabold text-center py-0.5 rounded text-[10px] uppercase tracking-wider shrink-0`}>Tap Beers & Cider</div>
       <div className="grid grid-cols-2 gap-1 flex-[8] min-h-0" style={{ gridAutoRows: '1fr' }}>
-        {[...TOP_BEER_ROW1, ...TOP_BEER_ROW2].map((b, idx) => (
-          <button key={b.name} onClick={() => addItem(b.name, b.price, 'Beer', 'Beverage')} className={`${btnBase} ${isPastel ? PASTEL_TAP[idx % PASTEL_TAP.length] : b.bg} h-full`}>{b.name}</button>
+        {[...TOP_BEER_ROW1, ...TOP_BEER_ROW2].map((b) => (
+          <button key={b.name} onClick={() => addItem(b.name, b.price, 'Beer', 'Beverage')} className={`${btnBase} ${isPastel ? getPastelTapBg(b.name) : b.bg} h-full`}>{b.name}</button>
         ))}
       </div>
-      <div className={`${pc('bg-slate-200 text-slate-900', 'bg-[#e2e8f0] text-slate-900')} font-extrabold text-center py-0.5 rounded text-[10px] uppercase tracking-wider shrink-0`}>BTL & 0% / Low</div>
+      <div className={`${pc('bg-slate-200 text-slate-900', 'bg-[#bbf7d0] text-slate-900')} font-extrabold text-center py-0.5 rounded text-[10px] uppercase tracking-wider shrink-0`}>BTL & 0% / Low</div>
       <div className="grid grid-cols-3 gap-1 flex-[3] min-h-0" style={{ gridAutoRows: '1fr' }}>
-        {[...TOP_BEER_ROW3_BTL, ...TOP_BEER_ROW4_BTL].map((b, idx) => (
-          <button key={b.name} onClick={() => addItem(b.name, b.price, 'Beer', 'Beverage')} className={`${btnBase} ${isPastel ? PASTEL_BTL[idx % PASTEL_BTL.length] : b.bg} h-full`}>{b.name}</button>
+        {[...TOP_BEER_ROW3_BTL, ...TOP_BEER_ROW4_BTL].map((b) => (
+          <button key={b.name} onClick={() => addItem(b.name, b.price, 'Beer', 'Beverage')} className={`${btnBase} ${isPastel ? getPastelBtlBg(b.name) : b.bg} h-full`}>{b.name}</button>
         ))}
       </div>
-      <div className={`${pc('bg-slate-200 text-slate-900', 'bg-[#e2e8f0] text-slate-900')} font-extrabold text-center py-0.5 rounded text-[10px] uppercase tracking-wider shrink-0`}>QRT & Split</div>
+      <div className={`${pc('bg-slate-200 text-slate-900', 'bg-[#fed7aa] text-slate-900')} font-extrabold text-center py-0.5 rounded text-[10px] uppercase tracking-wider shrink-0`}>QRT & Split</div>
       <div className="grid grid-cols-3 gap-1 flex-[2] min-h-0" style={{ gridAutoRows: '1fr' }}>
-        {[...TOP_BEER_ROW3_QRT, ...TOP_BEER_ROW4_QRT].map((b, idx) => (
-          <button key={b.name} onClick={() => addItem(b.name, b.price, 'Beer', 'Beverage')} className={`${btnBase} ${isPastel ? PASTEL_QRT[idx % PASTEL_QRT.length] : b.bg} h-full`}>{b.name}</button>
+        {[...TOP_BEER_ROW3_QRT, ...TOP_BEER_ROW4_QRT].map((b) => (
+          <button key={b.name} onClick={() => addItem(b.name, b.price, 'Beer', 'Beverage')} className={`${btnBase} ${isPastel ? getPastelQrtBg() : b.bg} h-full`}>{b.name}</button>
         ))}
         <button onClick={() => showToast('Split Item Mode')} className={`${btnBase} ${pc('bg-black text-white', 'bg-[#cbd5e1] text-slate-900')} h-full`}>Split Item</button>
       </div>
@@ -567,31 +574,31 @@ const App = () => {
             </div>
           </div>
 
-          {/* Row 3: RTDs (Orange) + Shots (Cyan) + Redbull Cocktails (Violet) */}
+          {/* Row 3: RTDs (Peach) + Shots (Cyan) + Redbull Cocktails (Purple) */}
           <div className="grid grid-cols-3 gap-1 flex-[1.5] min-h-0">
             <div className="flex flex-col gap-0.5 min-h-0">
-              <div className={`${pc('bg-orange-500 text-slate-950', 'bg-[#fed7aa] text-slate-900')} font-extrabold text-center py-0.5 rounded text-[10px] uppercase shrink-0`}>RTD's</div>
+              <div className={`${pc('bg-orange-500 text-slate-950', 'bg-[#fdba74] text-slate-900')} font-extrabold text-center py-0.5 rounded text-[10px] uppercase shrink-0`}>RTD's</div>
               <div className="grid grid-rows-3 gap-1 flex-1 min-h-0">
-                <button onClick={() => addItem('Jim Beam & Coke RTD', 12, 'RTD')} className={`${btnBase} ${pc('bg-[#fb923c] text-slate-950', 'bg-[#ffedd5] text-slate-900')} h-full`}>Jim Beam & Coke RTD</button>
+                <button onClick={() => addItem('Jim Beam & Coke RTD', 12, 'RTD')} className={`${btnBase} ${pc('bg-[#fb923c] text-slate-950', 'bg-[#fed7aa] text-slate-900')} h-full`}>Jim Beam & Coke RTD</button>
                 <button onClick={() => addItem('Jack Daniels & Coke RTD', 13, 'RTD')} className={`${btnBase} ${pc('bg-[#f97316] text-slate-950', 'bg-[#fed7aa] text-slate-900')} h-full`}>Jack Daniels & Coke RTD</button>
-                <button onClick={() => addItem('Smirnoff Red RTD', 12, 'RTD')} className={`${btnBase} ${pc('bg-[#fdba74] text-slate-950', 'bg-[#ffedd5] text-slate-900')} h-full`}>Smirnoff Red RTD</button>
+                <button onClick={() => addItem('Smirnoff Red RTD', 12, 'RTD')} className={`${btnBase} ${pc('bg-[#fdba74] text-slate-950', 'bg-[#fed7aa] text-slate-900')} h-full`}>Smirnoff Red RTD</button>
               </div>
             </div>
             <div className="flex flex-col gap-0.5 min-h-0">
-              <div className={`${pc('bg-cyan-500 text-slate-950', 'bg-[#bae6fd] text-slate-900')} font-extrabold text-center py-0.5 rounded text-[10px] uppercase shrink-0`}>Shots</div>
+              <div className={`${pc('bg-cyan-500 text-slate-950', 'bg-[#67e8f9] text-slate-900')} font-extrabold text-center py-0.5 rounded text-[10px] uppercase shrink-0`}>Shots</div>
               <div className="grid grid-cols-2 grid-rows-2 gap-1 flex-1 min-h-0">
-                <button onClick={() => addItem('Jam Donut', 12, 'Shots')} className={`${btnBase} ${pc('bg-[#38bdf8] text-slate-950', 'bg-[#e0f2fe] text-slate-900')} h-full`}>Jam Donut</button>
-                <button onClick={() => addItem('Quick F*ck', 12, 'Shots')} className={`${btnBase} ${pc('bg-[#38bdf8] text-slate-950', 'bg-[#e0f2fe] text-slate-900')} h-full`}>Quick F*ck</button>
-                <button onClick={() => addItem("Shankey's Whip", 12, 'Shots')} className={`${btnBase} ${pc('bg-[#0ea5e9] text-white', 'bg-[#bae6fd] text-slate-900')} h-full`}>Shankey's Whip</button>
-                <button onClick={() => addItem('Fireball Shot $10', 10, 'Shots')} className={`${btnBase} ${pc('bg-[#0ea5e9] text-white', 'bg-[#bae6fd] text-slate-900')} h-full`}>Fireball Shot $10</button>
+                <button onClick={() => addItem('Jam Donut', 12, 'Shots')} className={`${btnBase} ${pc('bg-[#38bdf8] text-slate-950', 'bg-[#a5f3fc] text-slate-900')} h-full`}>Jam Donut</button>
+                <button onClick={() => addItem('Quick F*ck', 12, 'Shots')} className={`${btnBase} ${pc('bg-[#38bdf8] text-slate-950', 'bg-[#a5f3fc] text-slate-900')} h-full`}>Quick F*ck</button>
+                <button onClick={() => addItem("Shankey's Whip", 12, 'Shots')} className={`${btnBase} ${pc('bg-[#0ea5e9] text-white', 'bg-[#a5f3fc] text-slate-900')} h-full`}>Shankey's Whip</button>
+                <button onClick={() => addItem('Fireball Shot $10', 10, 'Shots')} className={`${btnBase} ${pc('bg-[#0ea5e9] text-white', 'bg-[#a5f3fc] text-slate-900')} h-full`}>Fireball Shot $10</button>
               </div>
             </div>
             <div className="flex flex-col gap-0.5 min-h-0">
-              <div className={`${pc('bg-purple-600 text-white', 'bg-[#e9d5ff] text-slate-900')} font-extrabold text-center py-0.5 rounded text-[10px] uppercase shrink-0`}>Redbull Cocktails</div>
+              <div className={`${pc('bg-purple-600 text-white', 'bg-[#d8b4fe] text-slate-900')} font-extrabold text-center py-0.5 rounded text-[10px] uppercase shrink-0`}>Redbull Cocktails</div>
               <div className="grid grid-rows-3 gap-1 flex-1 min-h-0">
-                <button onClick={() => addItem('Redbull & Vodka', 14, 'Cocktails')} className={`${btnBase} ${pc('bg-[#a855f7] text-white', 'bg-[#f3e8ff] text-slate-900')} h-full`}>Redbull & Vodka</button>
+                <button onClick={() => addItem('Redbull & Vodka', 14, 'Cocktails')} className={`${btnBase} ${pc('bg-[#a855f7] text-white', 'bg-[#e9d5ff] text-slate-900')} h-full`}>Redbull & Vodka</button>
                 <button onClick={() => addItem('Redbull & Jager', 14, 'Cocktails')} className={`${btnBase} ${pc('bg-[#9333ea] text-white', 'bg-[#e9d5ff] text-slate-900')} h-full`}>Redbull & Jager</button>
-                <button onClick={() => addItem('Redbull & Tequila', 14, 'Cocktails')} className={`${btnBase} ${pc('bg-[#7e22ce] text-white', 'bg-[#f3e8ff] text-slate-900')} h-full`}>Redbull & Tequila</button>
+                <button onClick={() => addItem('Redbull & Tequila', 14, 'Cocktails')} className={`${btnBase} ${pc('bg-[#7e22ce] text-white', 'bg-[#e9d5ff] text-slate-900')} h-full`}>Redbull & Tequila</button>
               </div>
             </div>
           </div>
@@ -611,16 +618,19 @@ const App = () => {
       {/* BEVERAGE: Sparkling & White Wine */}
       {mainMode === 'Beverage' && subTab === 'Sparkling & White Wine' && (
         <div className="grid grid-cols-5 gap-1 h-full min-h-0">
-          {WHITE_WINE_COLS.map(col => (
-            <div key={col.title} className="flex flex-col gap-1 h-full min-h-0">
-              <div className="bg-white text-slate-900 font-extrabold text-center py-0.5 rounded text-[clamp(10px,0.7vw,12px)] shrink-0">{col.title}</div>
-              <div className="grid grid-rows-6 gap-1 flex-1 min-h-0">
-                {col.items.map(w => (
-                  <button key={w.name} onClick={() => addItem(w.name, w.price, 'White Wine', 'Beverage')} className={`${btnBase} ${w.bg} h-full`}>{w.name}</button>
-                ))}
+          {WHITE_WINE_COLS.map((col, colIdx) => {
+            const pastelColBg = ['bg-[#fbcfe8] text-slate-900', 'bg-[#bbf7d0] text-slate-900', 'bg-[#bae6fd] text-slate-900', 'bg-[#fef08a] text-slate-900', 'bg-[#e9d5ff] text-slate-900'][colIdx % 5];
+            return (
+              <div key={col.title} className="flex flex-col gap-1 h-full min-h-0">
+                <div className="bg-white text-slate-900 font-extrabold text-center py-0.5 rounded text-[clamp(10px,0.7vw,12px)] shrink-0">{col.title}</div>
+                <div className="grid grid-rows-6 gap-1 flex-1 min-h-0">
+                  {col.items.map(w => (
+                    <button key={w.name} onClick={() => addItem(w.name, w.price, 'White Wine', 'Beverage')} className={`${btnBase} ${isPastel ? pastelColBg : w.bg} h-full`}>{w.name}</button>
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
@@ -636,17 +646,17 @@ const App = () => {
                 { name: 'Roaring Meg Pinot Noir', price: 16.0 },
                 { name: 'Mt Difficulty Estate Bannockburn', price: 18.0 },
               ].map(w => (
-                <button key={w.name} onClick={() => addItem(w.name, w.price, 'Red Wine', 'Beverage')} className={`${btnBase} bg-[#fca5a5] text-slate-950 h-full`}>{w.name}</button>
+                <button key={w.name} onClick={() => addItem(w.name, w.price, 'Red Wine', 'Beverage')} className={`${btnBase} ${pc('bg-[#fca5a5] text-slate-950', 'bg-[#fecdd3] text-slate-900')} h-full`}>{w.name}</button>
               ))}
             </div>
           </div>
           <div className="flex-1 flex flex-col gap-1 min-h-0">
             <div className="bg-white text-slate-900 font-extrabold text-center py-0.5 rounded text-[clamp(10px,0.7vw,12px)] shrink-0">Merlot / Cab.Sav / Shiraz / Port</div>
             <div className="grid grid-cols-4 gap-1.5 h-1/3 min-h-[44px]">
-              <button onClick={() => addItem('House Red Merlot Kopiko Bay', 11.0, 'Red Wine')} className={`${btnBase} bg-[#fb7185] text-slate-950 h-full`}>House Red Merlot Kopiko Bay</button>
-              <button onClick={() => addItem('Cabernet Sauvignon', 13.0, 'Red Wine')} className={`${btnBase} bg-[#f472b6] text-slate-950 h-full`}>Cabernet Sauvignon</button>
-              <button onClick={() => addItem('Church Road Syrah', 15.0, 'Red Wine')} className={`${btnBase} bg-[#fb923c] text-slate-950 h-full`}>Church Road Syrah</button>
-              <button onClick={() => addItem('Taylors 10 Year Tawny Port', 14.0, 'Red Wine')} className={`${btnBase} bg-[#fde047] text-slate-950 h-full`}>Taylors 10 Year Tawny Port</button>
+              <button onClick={() => addItem('House Red Merlot Kopiko Bay', 11.0, 'Red Wine')} className={`${btnBase} ${pc('bg-[#fb7185] text-slate-950', 'bg-[#fda4af] text-slate-900')} h-full`}>House Red Merlot Kopiko Bay</button>
+              <button onClick={() => addItem('Cabernet Sauvignon', 13.0, 'Red Wine')} className={`${btnBase} ${pc('bg-[#f472b6] text-slate-950', 'bg-[#fbcfe8] text-slate-900')} h-full`}>Cabernet Sauvignon</button>
+              <button onClick={() => addItem('Church Road Syrah', 15.0, 'Red Wine')} className={`${btnBase} ${pc('bg-[#fb923c] text-slate-950', 'bg-[#fed7aa] text-slate-900')} h-full`}>Church Road Syrah</button>
+              <button onClick={() => addItem('Taylors 10 Year Tawny Port', 14.0, 'Red Wine')} className={`${btnBase} ${pc('bg-[#fde047] text-slate-950', 'bg-[#fef08a] text-slate-900')} h-full`}>Taylors 10 Year Tawny Port</button>
             </div>
           </div>
         </div>
@@ -657,14 +667,14 @@ const App = () => {
         <div className="flex flex-col gap-1 h-full min-h-0">
           <div className="grid grid-cols-7 gap-1 h-[clamp(26px,3.8vh,42px)] shrink-0">
             {['Rum / Aperitif / Brandy', 'Bourbon', 'Gin', 'Scotch / Whisky', 'Tequila / Vodka', 'Liqueur / Other', 'FAST'].map(sc => (
-              <button key={sc} onClick={() => setSpiritCat(sc)} className={`${btnBase} ${spiritCat === sc ? 'bg-[#0284c7] text-white ring-2 ring-sky-300' : 'bg-[#1e3a8a] text-white'}`}>{sc}</button>
+              <button key={sc} onClick={() => setSpiritCat(sc)} className={`${btnBase} ${spiritCat === sc ? pc('bg-[#0284c7] text-white ring-2 ring-sky-300', 'bg-[#bae6fd] text-slate-900 ring-2 ring-slate-700') : pc('bg-[#1e3a8a] text-white', 'bg-[#e0e7ff] text-slate-900')}`}>{sc}</button>
             ))}
           </div>
           <div className="grid grid-cols-4 gap-1 flex-1 min-h-0" style={{ gridAutoRows: '1fr' }}>
             {groupedSpiritItems.map(s => (
-              <button key={s.id} onClick={() => handleSpiritClick(s)} className={`${btnBase} bg-[#6366f1] text-white hover:bg-indigo-500 h-full flex-col`}>
+              <button key={s.id} onClick={() => handleSpiritClick(s)} className={`${btnBase} ${pc('bg-[#6366f1] text-white hover:bg-indigo-500', 'bg-[#c7d2fe] text-slate-900 hover:bg-[#a5b4fc]')} h-full flex-col`}>
                 <span>{s.baseName}</span>
-                {(s.pour15 || s.pour30) && <span className="text-[8px] text-indigo-200 font-bold">15ml / 30ml</span>}
+                {(s.pour15 || s.pour30) && <span className={`text-[8px] font-bold ${pc('text-indigo-200', 'text-slate-600')}`}>15ml / 30ml</span>}
               </button>
             ))}
           </div>
@@ -685,7 +695,7 @@ const App = () => {
                 ['Mojito', 19, 'bg-[#c084fc]'], ['Fireball Cocktail $12', 12, 'bg-[#a855f7] text-white'],
                 ['Long Island Iced Tea', 22, 'bg-[#c084fc]'], ['Cloverless Sour (Non Alcoholic)', 12, 'bg-[#6ee7b7]'],
               ].map(([n, p, bg]) => (
-                <button key={n} onClick={() => addItem(n, p, 'Cocktails')} className={`${btnBase} ${bg} text-slate-950 h-full`}>{n}</button>
+                <button key={n} onClick={() => addItem(n, p, 'Cocktails')} className={`${btnBase} ${isPastel ? (n.includes('Non Alcoholic') ? 'bg-[#bbf7d0] text-slate-900' : 'bg-[#e9d5ff] text-slate-900') : `${bg} text-slate-950`} h-full`}>{n}</button>
               ))}
             </div>
           </div>
@@ -693,26 +703,26 @@ const App = () => {
             <div className="bg-white text-slate-900 font-extrabold text-center py-0.5 rounded text-[11px] shrink-0">Shots</div>
             <div className="grid grid-rows-6 gap-1 flex-1 min-h-0">
               {[['Jam Donut', 12], ['Quick F*ck', 12], ["Shankey's Whip", 12], ['Fireball Shot $10', 10]].map(([n, p]) => (
-                <button key={n} onClick={() => addItem(n, p, 'Shots')} className={`${btnBase} bg-[#38bdf8] text-slate-950 h-full`}>{n}</button>
+                <button key={n} onClick={() => addItem(n, p, 'Shots')} className={`${btnBase} ${pc('bg-[#38bdf8] text-slate-950', 'bg-[#a5f3fc] text-slate-900')} h-full`}>{n}</button>
               ))}
               <div></div>
-              <button onClick={() => showToast('Standard Pour: 30ml / Double: 60ml')} className={`${btnBase} bg-[#f0abfc] text-slate-950 h-full`}>Product Information</button>
+              <button onClick={() => showToast('Standard Pour: 30ml / Double: 60ml')} className={`${btnBase} ${pc('bg-[#f0abfc] text-slate-950', 'bg-[#fbcfe8] text-slate-900')} h-full`}>Product Information</button>
             </div>
           </div>
           <div className="col-span-2 flex flex-col gap-1 min-h-0">
             <div className="bg-white text-slate-900 font-extrabold text-center py-0.5 rounded text-[11px] shrink-0">RTD's</div>
             <div className="grid grid-cols-2 grid-rows-6 gap-1 flex-1 min-h-0">
-              <button onClick={() => addItem('Smirnoff Red RTD', 12, 'RTD')} className={`${btnBase} bg-[#fb923c] text-slate-950 h-full`}>Smirnoff Red RTD</button>
-              <button onClick={() => addItem('Jack Daniels & Coke RTD', 13, 'RTD')} className={`${btnBase} bg-[#f97316] text-slate-950 h-full`}>Jack Daniels & Coke RTD</button>
-              <button onClick={() => addItem('Jim Beam & Coke RTD', 12, 'RTD')} className={`${btnBase} bg-[#fdba74] text-slate-950 h-full`}>Jim Beam & Coke RTD</button>
+              <button onClick={() => addItem('Smirnoff Red RTD', 12, 'RTD')} className={`${btnBase} ${pc('bg-[#fb923c] text-slate-950', 'bg-[#fed7aa] text-slate-900')} h-full`}>Smirnoff Red RTD</button>
+              <button onClick={() => addItem('Jack Daniels & Coke RTD', 13, 'RTD')} className={`${btnBase} ${pc('bg-[#f97316] text-slate-950', 'bg-[#fed7aa] text-slate-900')} h-full`}>Jack Daniels & Coke RTD</button>
+              <button onClick={() => addItem('Jim Beam & Coke RTD', 12, 'RTD')} className={`${btnBase} ${pc('bg-[#fdba74] text-slate-950', 'bg-[#fed7aa] text-slate-900')} h-full`}>Jim Beam & Coke RTD</button>
               <div></div>
-              <button onClick={() => addItem('Redbull & Jager', 14, 'RTD')} className={`${btnBase} bg-[#a855f7] text-white h-full`}>Redbull & Jager</button>
+              <button onClick={() => addItem('Redbull & Jager', 14, 'RTD')} className={`${btnBase} ${pc('bg-[#a855f7] text-white', 'bg-[#e9d5ff] text-slate-900')} h-full`}>Redbull & Jager</button>
               <div></div>
-              <button onClick={() => addItem('Redbull & Tequila', 14, 'RTD')} className={`${btnBase} bg-[#a855f7] text-white h-full`}>Redbull & Tequila</button>
+              <button onClick={() => addItem('Redbull & Tequila', 14, 'RTD')} className={`${btnBase} ${pc('bg-[#a855f7] text-white', 'bg-[#e9d5ff] text-slate-900')} h-full`}>Redbull & Tequila</button>
               <div></div>
-              <button onClick={() => addItem('Redbull & Vodka', 14, 'RTD')} className={`${btnBase} bg-[#a855f7] text-white h-full`}>Redbull & Vodka</button>
+              <button onClick={() => addItem('Redbull & Vodka', 14, 'RTD')} className={`${btnBase} ${pc('bg-[#a855f7] text-white', 'bg-[#e9d5ff] text-slate-900')} h-full`}>Redbull & Vodka</button>
               <div></div>
-              <button onClick={() => addItem('Cointreau & Redbull', 15, 'RTD')} className={`${btnBase} bg-[#a855f7] text-white h-full`}>Cointreau & Redbull</button>
+              <button onClick={() => addItem('Cointreau & Redbull', 15, 'RTD')} className={`${btnBase} ${pc('bg-[#a855f7] text-white', 'bg-[#e9d5ff] text-slate-900')} h-full`}>Cointreau & Redbull</button>
             </div>
           </div>
         </div>
@@ -722,7 +732,7 @@ const App = () => {
       {mainMode === 'Beverage' && subTab === 'Non Alcoholic' && (
         <div className="grid grid-cols-4 gap-1 h-full min-h-0" style={{ gridAutoRows: '1fr' }}>
           {nonAlcItems.slice(0, 32).map(i => (
-            <button key={i.id} onClick={() => addItem(i.name, i.price, 'Non Alcoholic')} className={`${btnBase} bg-[#6ee7b7] text-slate-950 h-full`}>{i.name}</button>
+            <button key={i.id} onClick={() => addItem(i.name, i.price, 'Non Alcoholic')} className={`${btnBase} ${pc('bg-[#6ee7b7] text-slate-950', 'bg-[#bbf7d0] text-slate-900')} h-full`}>{i.name}</button>
           ))}
         </div>
       )}
@@ -733,7 +743,7 @@ const App = () => {
           <div className="bg-white text-slate-900 font-extrabold text-center py-0.5 rounded text-[11px] shrink-0">Coffee</div>
           <div className="grid grid-cols-4 grid-rows-2 gap-1 flex-[2] min-h-0">
             {['Flat White', 'Latte', 'Cappuchino', 'Chai Latte', 'Long Black', 'Short Black', 'Mocha', 'Hot Chocolate'].map((c, idx) => (
-              <button key={c} onClick={() => addItem(c, 5.5, 'Coffee')} className={`${btnBase} ${idx === 3 || idx === 7 ? 'bg-[#e2e8f0]' : 'bg-[#fca5a5]'} text-slate-900 h-full text-[clamp(11px,1vw,15px)]`}>{c}</button>
+              <button key={c} onClick={() => addItem(c, 5.5, 'Coffee')} className={`${btnBase} ${idx === 3 || idx === 7 ? pc('bg-[#e2e8f0]', 'bg-[#f1f5f9]') : pc('bg-[#fca5a5]', 'bg-[#fecdd3]')} text-slate-900 h-full text-[clamp(11px,1vw,15px)]`}>{c}</button>
             ))}
           </div>
           <div className="grid grid-cols-4 gap-1 flex-1 min-h-0">
@@ -741,13 +751,13 @@ const App = () => {
               <div className="bg-white text-slate-900 font-extrabold text-center py-0.5 rounded text-[11px] shrink-0">Tea</div>
               <div className="grid grid-cols-3 gap-1 flex-1 min-h-0">
                 {['Earl Grey', 'English Breakfast', 'Green Tea'].map(t => (
-                  <button key={t} onClick={() => addItem(t, 5.0, 'Coffee')} className={`${btnBase} bg-[#67e8f9] text-slate-900 h-full`}>{t}</button>
+                  <button key={t} onClick={() => addItem(t, 5.0, 'Coffee')} className={`${btnBase} ${pc('bg-[#67e8f9]', 'bg-[#a5f3fc]')} text-slate-900 h-full`}>{t}</button>
                 ))}
               </div>
             </div>
             <div className="grid grid-rows-3 gap-1 min-h-0">
               {['Caramel Shot', 'Hazelnut Shot', 'Vanilla Shot'].map(s => (
-                <button key={s} onClick={() => addItem(s, 1.0, 'Coffee')} className={`${btnBase} bg-[#dbeafe] text-slate-900 h-full`}>{s}</button>
+                <button key={s} onClick={() => addItem(s, 1.0, 'Coffee')} className={`${btnBase} ${pc('bg-[#dbeafe]', 'bg-[#e0e7ff]')} text-slate-900 h-full`}>{s}</button>
               ))}
             </div>
           </div>
@@ -1212,21 +1222,21 @@ const App = () => {
         </div>
       )}
 
-      {/* LAYOUT 8: NIGHTCLUB 2 (Speed Rail Copy, Pastel Colours, Far-Right Receipt) */}
+      {/* LAYOUT 8: NIGHTCLUB 2 (Speed Rail Copy, Grouped Pastel Colours, Middle Tap/BTL/QRT, Far-Right Receipt) */}
       {layoutMode === 'nightclub2' && (
         <div className="flex-1 flex min-h-0 p-1 gap-1">
           <div className="flex-1 flex flex-col min-w-0 min-h-0 gap-1">
             {renderModeAndFunctions(true)}
             <div className="flex-1 flex min-h-0 gap-1">
+              <div className="flex-1 flex flex-col min-w-0 min-h-0 gap-1">
+                {renderSubTabs()}
+                {renderMenuContent()}
+              </div>
               <div className="w-[36%] flex flex-col min-h-0 gap-1 bg-slate-800/40 p-1 rounded border border-slate-500/50">
                 <div className="flex-1 min-h-0">
                   {renderBeerGridCompact()}
                 </div>
                 {renderFinaliseCol(true)}
-              </div>
-              <div className="flex-1 flex flex-col min-w-0 min-h-0 gap-1">
-                {renderSubTabs()}
-                {renderMenuContent()}
               </div>
             </div>
             {renderBottomBar()}
